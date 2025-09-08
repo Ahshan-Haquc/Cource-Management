@@ -1,7 +1,9 @@
 const express = require('express')
-const {getCource} = require('../controllers/courceController')
-const courceRouter = express.Router()
+const {getCourse} = require('../controllers/courceController')
+const authenticateUserAccess = require('../middlewares/accessPermission')
 
-courceRouter.get('/getCource',getCource);
+const courseRouter = express.Router()
 
-module.exports = courceRouter;
+courseRouter.get('/getCourse',authenticateUserAccess, getCourse);
+
+module.exports = courseRouter;

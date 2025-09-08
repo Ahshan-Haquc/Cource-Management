@@ -102,8 +102,33 @@ const userLogin = async (req, res) => {
     }
 };
 
+const userLogout = async (req, res, next) => {
+  try {
+    const user = await UserModel.findOne({ _id: req.userInfo._id });
+
+    if(!user) return res.status(401).json({success: false, message: "Logout unsuccesfull."})
+
+    if (user) {
+      user.tokens = [];
+      await user.save();
+    }
+
+    res.clearCookie("userCookie", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+    });
+
+    return res.status(200).json({ success: true, message: "Logout successful" });
+  } catch (error) {
+    console.log("Error in logout router");
+    next(error);
+  }
+};
+
 module.exports={
     userLogin,
     userRegister,
-    adminRegister
+    adminRegister,
+    userLogout
 }
