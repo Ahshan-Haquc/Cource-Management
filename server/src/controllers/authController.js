@@ -41,11 +41,69 @@ const userRegister = async (req, res)=>{
     }
 };
 
-const userLogin = (req, res)=>{
-    res.send("welcome to login page")
+const adminRegister = async (req,res)=>{
+    try {
+        const {email} = req.body;
+        const password = await bcrypt.hash(req.body.password, 10);
+        const role="admin";
+
+    if(!email || !password){
+        res.status(400);
+        throw new Error("Input required in all fields.");
+    }
+    const user = await UserModel.findOne({email});
+    if(user){
+        res.status(400).json({success:false, message:"Try with another email account. Admit already exist with this email"});
+    }else{
+        const Admin = new UserModel({
+            email, password, role
+        })
+        const data= await Admin.save();
+        res.status(201).json({success:true, message:"Admin created succesfully"});
+    }
+    } catch (error) {
+        res.status(500)
+        throw new Error("Server error during admin registration.")
+    }
 }
+
+const userLogin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) return res.status(401).json({ message: "User not found" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: "Invalid password" });
+
+    // Generateing JWT token
+    const token = await user.generateToken();
+
+    // Setting token in HTTP-only cookie , duration is 1h
+    res.cookie("userCookie", token, {
+      httpOnly: true,
+      secure: false, 
+      expires: new Date(Date.now() + 60 * 60 * 1000),
+    });
+
+    // Final response with role
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        _id: user._id,
+        email: user.email,
+        role: user.role
+      },
+    });
+    } catch (err) {
+        res.status(500);
+        throw new Error("Server error during login");
+    }
+};
 
 module.exports={
     userLogin,
-    userRegister
+    userRegister,
+    adminRegister
 }
