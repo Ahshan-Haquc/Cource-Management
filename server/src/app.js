@@ -14,6 +14,7 @@ app.use(cookieParser())
 // router endpoints
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/admin/courses', courseRoutes);
 
 // here i will handle centralized errors
 app.use(errorHandler);
