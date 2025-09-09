@@ -79,24 +79,30 @@ const seeUserPurchasedCourses = async (req, res) => {
         if (!userId) {
             return res.status(401).json({ success: false, message: "Please login first" });
         }
+
         const userPurchases = await PurchaseModel.findOne({ user: userId });
         if (!userPurchases) {
             return res.status(404).json({ success: false, message: "No purchased courses found." });
         }
 
         let courses = [];
-        userPurchases.courses.forEach(courseId=>{
-            const course = await CourseModel.findOne({_id: courseId});
-            if(course){
+        for (const courseId of userPurchases.courses) {
+            const course = await CourseModel.findById(courseId);
+            if (course) {
                 courses.push(course);
             }
-        })
-        res.status(200).json({ success: true, courses, message: "Succesfull fetched your purchesed courses." });
+        }
+
+        res.status(200).json({
+            success: true,
+            courses,
+            message: "Successfully fetched your purchased courses."
+        });
     } catch (error) {
-        res.status(500);
-        throw new Error("Server error while fetching user's purchased courses.");
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error while fetching user's purchased courses." });
     }
-}
+};
 
 const deleteUserPurchasedCourse = async (req, res) => {
     console.log("Request received to delete a purchased course for user");

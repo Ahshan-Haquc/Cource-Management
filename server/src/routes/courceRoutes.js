@@ -1,6 +1,6 @@
 const express = require('express')
 const {displayAllCourseToUser, displayOneCourseToUser, purchaseCourse, seeUserPurchasedCourses, deleteUserPurchasedCourse} = require('../controllers/userCourseController')
-const {addNewCourse, deleteCourse} = require('../controllers/adminCourseController')
+const {addNewCourse, deleteCourse, editCourseInfo} = require('../controllers/adminCourseController')
 const authenticateUserAccess = require('../middlewares/accessPermission') // i am adding this 'authenticateUserAccess' so that i can prevent unauthorize user access
 
 const courseRouter = express.Router()
@@ -14,6 +14,7 @@ courseRouter.delete('/deleteUserPurchasedCourse/:courseId', authenticateUserAcce
 
 //admin course routers
 courseRouter.post('/addNewCourse',addNewCourse)
+courseRouter.patch('/editCourseInfo/:id', editCourseInfo)
 courseRouter.delete('/deleteCourse/:id', deleteCourse)
 courseRouter.get('/displayAllCourseToAdmin', displayAllCourseToUser);
 
