@@ -124,11 +124,13 @@ const userLogin = async (req, res) => {
     }
 };
 
-const userLogout = async (req, res, next) => {
+const userLogout = async (req, res) => {
+  console.log("Request recieved for logout.");
   try {
+    console.log(req.userInfo._id);
     const user = await UserModel.findOne({ _id: req.userInfo._id });
 
-    if(!user) return res.status(401).json({success: false, message: "Logout unsuccesfull."})
+    if(!user) return res.status(401).json({success: false, message: "Please become valid user first."})
 
     if (user) {
       user.tokens = [];
@@ -143,8 +145,8 @@ const userLogout = async (req, res, next) => {
 
     return res.status(200).json({ success: true, message: "Logout successful" });
   } catch (error) {
-    console.log("Error in logout router");
-    next(error);
+    res.status(500)
+    throw new Error(error);
   }
 };
 

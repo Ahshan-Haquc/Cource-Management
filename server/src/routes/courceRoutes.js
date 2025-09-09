@@ -13,9 +13,9 @@ courseRouter.get('/seeUserPurchasedCourses', authenticateUserAccess, seeUserPurc
 courseRouter.delete('/deleteUserPurchasedCourse/:courseId', authenticateUserAccess, deleteUserPurchasedCourse);
 
 //admin course routers
-courseRouter.get('/displayAllCourseToAdmin', displayAllCourseToUser);
-courseRouter.post('/addNewCourse',addNewCourse)
-courseRouter.patch('/editCourseInfo/:id', editCourseInfo)
-courseRouter.delete('/deleteCourse/:id', deleteCourse)
+courseRouter.get('/displayAllCourseToAdmin',authenticateUserAccess, displayAllCourseToUser);
+courseRouter.post('/addNewCourse', authenticateUserAccess, addNewCourse)
+courseRouter.patch('/editCourseInfo/:id',authenticateUserAccess, editCourseInfo)
+courseRouter.delete('/deleteCourse/:id',authenticateUserAccess, deleteCourse)
 
 module.exports = courseRouter;

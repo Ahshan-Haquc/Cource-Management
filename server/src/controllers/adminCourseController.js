@@ -3,6 +3,10 @@ const CourseModel = require('../models/courceSchema')
 const addNewCourse = async (req, res)=>{
     console.log("Request recieved for adding new course");
     try {
+        //checking if role is not user then i will not allow them to add new course
+        if(req.userInfo.role!=="admin"){
+            return res.status(400).json({success: false, message:"Only admin can add new course. You can not."})
+        }
         const {title, description, price, instructor} = req.body;
         if(!title || !price){
             return res.status(400).json({success: false, message:"Title and Price are required."})
@@ -28,6 +32,11 @@ const addNewCourse = async (req, res)=>{
 const editCourseInfo = async (req, res) => {
     console.log("Request received for editing a course info");
     try {
+        //checking if role is not user then i will not allow them to add new course
+        if(req.userInfo.role!=="admin"){
+            return res.status(400).json({success: false, message:"Only admin can add new course. You can not."})
+        }
+
         const { id } = req.params;
         const newInfo = req.body;
         if (!id) {
@@ -54,6 +63,11 @@ const editCourseInfo = async (req, res) => {
 const deleteCourse = async (req, res) => {
     console.log("Request received for deleting a course");
     try {
+        //checking if role is not user then i will not allow them to add new course
+        if(req.userInfo.role!=="admin"){
+            return res.status(400).json({success: false, message:"Only admin can add new course. You can not."})
+        }
+        
         const { id } = req.params;
         if (!id) {
             return res.status(400).json({ success: false, message: "Course ID is required." });
