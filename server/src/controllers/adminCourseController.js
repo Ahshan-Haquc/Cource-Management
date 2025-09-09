@@ -23,6 +23,8 @@ const addNewCourse = async (req, res)=>{
     }
 }
 
+// sir, this is an extra feature which i am including to make my project more professional
+// because sometimes i need to update any info of courses
 const editCourseInfo = async (req, res) => {
     console.log("Request received for editing a course info");
     try {
