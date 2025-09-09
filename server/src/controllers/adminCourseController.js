@@ -23,6 +23,32 @@ const addNewCourse = async (req, res)=>{
     }
 }
 
+const editCourseInfo = async (req, res) => {
+    console.log("Request received for editing a course info");
+    try {
+        const { id } = req.params;
+        const newInfo = req.body;
+        if (!id) {
+            return res.status(400).json({ success: false, message: "Course ID is required." });
+        }else if(!newInfo){
+            return res.status(400).json({ success: false, message: "Input required." });
+        }
+
+        const editedCourse = await CourseModel.findByIdAndUpdate(id,
+            {$set: newInfo},
+            { new: true, runValidators: true }
+        );
+        if (!editedCourse) {
+            return res.status(404).json({ success: false, message: "Course not found." });
+        }
+
+        res.status(200).json({ success: true, message: "Course updated successfully." });
+    } catch (error) {
+        res.status(500);
+        throw new Error("Internal server error while deleting course.");
+    }
+}
+
 const deleteCourse = async (req, res) => {
     console.log("Request received for deleting a course");
     try {
@@ -45,5 +71,6 @@ const deleteCourse = async (req, res) => {
 
 module.exports = {
     addNewCourse,
+    editCourseInfo,
     deleteCourse
 }
