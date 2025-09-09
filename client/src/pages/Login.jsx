@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
+    const { setUser } = useAuth();
 
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -29,9 +31,11 @@ function Login() {
 
             if (res.data.token) {
                 alert("Login successful!");
-                // save token in localStorage (optional)
+                // save token in localStorage
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("role", res.data.user.role);
+                setUser(res.data.user);
+                // Redirect based on role
                 if (res.data.user.role === 'admin') {
                     navigate("/admin");
                 } else {
@@ -40,12 +44,12 @@ function Login() {
             }
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.message || "Login failed. Try again.");
+            setError("Login failed. Try again.");
         }
     };
 
     return (
-        <div className="max-w-md mx-auto bg-white p-8 shadow-lg rounded">
+        <div className="max-w-md mx-auto bg-[#31363F] text-[#EEEEEE] p-8 shadow-lg rounded">
             <h2 className="text-2xl font-bold mb-6 text-center">User Login</h2>
 
             {error && <p className="text-red-500 mb-3">{error}</p>}
@@ -69,7 +73,7 @@ function Login() {
                 />
                 <button
                     type="submit"
-                    className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+                    className="w-full bg-[#76ABAE] text-white py-2 rounded hover:bg-[#5e8f91] transition"
                 >
                     Login
                 </button>

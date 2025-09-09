@@ -1,4 +1,3 @@
-// src/pages/AddCourse.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +19,10 @@ function AddCourse() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!formData.title || !formData.price || !formData.instructor || !formData.description) {
+            alert("All fields are required.");
+            return;
+        }
         setError("");
         try {
             const res = await axios.post(
@@ -76,7 +79,7 @@ function AddCourse() {
                     />
                     <button
                         type="submit"
-                        className="w-full bg-[#76ABAE] text-[#222831] py-2 rounded hover:bg-[#5e8f91] transition"
+                        className="w-full bg-[#76ABAE] text-white py-2 rounded hover:bg-[#5e8f91] transition"
                     >
                         Add Course
                     </button>

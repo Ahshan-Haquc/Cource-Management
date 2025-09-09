@@ -23,7 +23,7 @@ function Signup() {
 
         try {
             const res = await axios.post(
-                "http://localhost:5000/api/auth/userRegister",
+                "http://localhost:5000/api/auth/adminRegister",
                 formData,
                 { withCredentials: true }
             );
@@ -40,7 +40,7 @@ function Signup() {
 
     return (
         <div className="max-w-md mx-auto bg-[#31363F] text-[#EEEEEE] p-8 shadow-lg rounded z-10">
-            <h2 className="text-2xl font-bold mb-6 text-center">User Signup</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">Admin Signup</h2>
 
             {error && <p className="text-red-500 mb-3">{error}</p>}
 
