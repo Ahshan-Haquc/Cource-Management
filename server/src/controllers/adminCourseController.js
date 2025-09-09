@@ -9,7 +9,7 @@ const addNewCourse = async (req, res)=>{
         }
         const {title, description, price, instructor} = req.body;
         if(!title || !price){
-            return res.status(400).json({success: false, message:"Title and Price are required."})
+            return res.status(400).json({success: false, message:"Title and Price are must required."})
         }
 
         const newCourse = new CourseModel({
