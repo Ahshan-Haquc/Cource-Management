@@ -50,7 +50,8 @@ function AdminHome() {
             <div className="flex justify-end mb-6">
                 <button
                     onClick={() => navigate("/admin/add-course")}
-                    className="bg-[#76ABAE] text-[#222831] px-6 py-2 rounded hover:bg-[#5e8f91] transition"
+                    className="w-full sm:w-auto flex-1 border-2 border-[#76ABAE] text-[#76ABAE] px-4 py-2 rounded font-semibold hover:bg-[#76ABAE] hover:text-[#222831] transition-colors duration-300"
+
                 >
                     + Add New Course
                 </button>
@@ -66,25 +67,40 @@ function AdminHome() {
                     courses.map((course) => (
                         <div
                             key={course._id}
-                            className="bg-[#31363F] text-[#EEEEEE] p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300"
+                            className="relative bg-[#31363F] text-[#EEEEEE] p-6 rounded-lg border border-transparent hover:border-[#76ABAE] transition-all duration-300 transform hover:scale-105 group"
                         >
-                            <h3 className="text-xl font-bold mb-2">{course.title}</h3>
+                            {/* Decorative flair */}
+                            <div className="absolute top-0 left-0 w-0 h-2 bg-[#76ABAE] group-hover:w-full transition-all duration-500"></div>
+                            <div className="absolute bottom-0 right-0 w-0 h-2 bg-[#76ABAE] group-hover:w-full transition-all duration-500"></div>
+
+                            <h3 className="text-xl md:text-2xl font-extrabold mb-2 tracking-wide text-[#EEEEEE]">
+                                {course.title}
+                            </h3>
+
                             <p className="mb-3 text-sm text-gray-300">
                                 {course.description?.substring(0, 80)}...
                             </p>
-                            <p className="font-semibold text-[#76ABAE] mb-4">
-                                Price: ${course.price}
-                            </p>
-                            <div className="flex justify-between">
+
+                            <div className="flex items-center justify-between mt-4 mb-6">
+                                <p className="font-bold text-xl text-[#76ABAE] flex items-center gap-1">
+                                    {course.price}
+                                </p>
+                                {/* A subtle indicator to make it feel more "techy" */}
+                                <div className="text-sm font-light text-gray-400 px-3 py-1 bg-gray-700 rounded-full">
+                                    Admin
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row justify-between gap-3">
                                 <button
                                     onClick={() => navigate(`/admin/edit-course/${course._id}`)}
-                                    className="bg-[#76ABAE] text-[#222831] px-4 py-2 rounded hover:bg-[#5e8f91] transition"
+                                    className="w-full sm:w-auto flex-1 border-2 border-[#76ABAE] text-[#76ABAE] px-4 py-2 rounded font-semibold hover:bg-[#76ABAE] hover:text-[#222831] transition-colors duration-300"
                                 >
                                     Update
                                 </button>
                                 <button
                                     onClick={() => handleDelete(course._id)}
-                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+                                    className="w-full sm:w-auto flex-1 bg-red-500 text-white px-4 py-2 rounded font-semibold hover:bg-red-600 transition-colors duration-300"
                                 >
                                     Delete
                                 </button>

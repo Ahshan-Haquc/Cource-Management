@@ -1,4 +1,3 @@
-// src/pages/EditCourse.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -50,8 +49,8 @@ function EditCourse() {
     // Handle update
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.title || !formData.price) {
-            setError("Title and price fields are required.");
+        if (!formData.title || !formData.price || !formData.instructor || !formData.description) {
+            alert("All fields are required.");
             return;
         }
         setError("");
@@ -83,7 +82,7 @@ function EditCourse() {
         <div className="min-h-screen bg-[#222831] flex justify-center items-center p-8">
             <div className="bg-[#31363F] p-8 rounded-xl shadow-lg w-full max-w-lg text-[#EEEEEE]">
                 <h2 className="text-2xl font-bold mb-6 text-center">Edit Course</h2>
-                {error && <p className="text-red-500 mb-3">{error}</p>}
+                {/* {error && <p className="text-red-500 mb-3">{error}</p>} */}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <input
@@ -120,7 +119,7 @@ function EditCourse() {
 
                     <button
                         type="submit"
-                        className="w-full bg-[#76ABAE] text-[#222831] py-2 rounded hover:bg-[#5e8f91] transition"
+                        className="w-full bg-[#76ABAE] text-white py-2 rounded hover:bg-[#5e8f91] transition"
                     >
                         Update Course
                     </button>
