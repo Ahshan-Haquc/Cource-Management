@@ -9,7 +9,13 @@ const userRegister = async (req, res)=>{
         //validating inputs
         if(!name || !email || !password){
             res.status(400);
-            throw new Error("Input required in the field");
+            throw new Error("Name, Email and password are required");
+        }
+        //checking email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            res.status(400);
+            throw new Error("Invalid email format");
         }
         // checking password length
         if(password.length < 6){
@@ -49,7 +55,13 @@ const adminRegister = async (req,res)=>{
 
     if(!email || !password){
         res.status(400);
-        throw new Error("Input required in all fields.");
+        throw new Error("Email and password are required");
+    }
+    //checking email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        res.status(400);
+        throw new Error("Invalid email format");
     }
     const user = await UserModel.findOne({email});
     if(user){
@@ -70,6 +82,16 @@ const adminRegister = async (req,res)=>{
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+    //checking email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        res.status(400);
+        throw new Error("Invalid email format");
+    }
+
     const user = await UserModel.findOne({ email });
     if (!user) return res.status(401).json({ message: "User not found" });
 
