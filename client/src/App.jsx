@@ -13,6 +13,7 @@ import AdminSignup from "./pages/AdminSignup"
 import AddCourse from "./components/AddCourse";
 import EditCourse from "./components/EditCourse";
 import { AuthProvider } from "./context/AuthContext";
+import LandingPage from "./pages/LandingPage";
 
 
 function App() {
@@ -21,7 +22,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<AppLayout />}>
-            <Route index element={<Home />} />
+            {/* <Route index element={<Home />} /> */}
+            <Route index element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/adminSignup" element={<AdminSignup />} />
