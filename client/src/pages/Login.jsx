@@ -49,35 +49,44 @@ function Login() {
     };
 
     return (
-        <div className="max-w-md mx-auto bg-[#31363F] text-[#EEEEEE] p-8 shadow-lg rounded">
-            <h2 className="text-2xl font-bold mb-6 text-center">User Login</h2>
+        <div className="w-screen h-[90vh] flex items-center">
+            <div className="max-w-md mx-auto bg-[#31363F] text-[#EEEEEE] p-8 shadow-lg rounded">
+                <h2 className="text-2xl font-bold mb-6 text-center">User Login</h2>
 
-            {error && <p className="text-red-500 mb-3">{error}</p>}
+                {error && <p className="text-red-500 mb-3">{error}</p>}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded"
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded"
-                />
-                <button
-                    type="submit"
-                    className="w-full bg-[#76ABAE] text-white py-2 rounded hover:bg-[#5e8f91] transition"
-                >
-                    Login
-                </button>
-            </form>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full p-2 border rounded"
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="w-full p-2 border rounded"
+                    />
+                    <div className="flex justify-between items-center">
+                        <div className="">
+                            <input type="checkbox" id="remember" className="mr-2" />
+                            <label htmlFor="remember" className="text-white">Remember me</label>
+                        </div>
+                        <p className="text-sm text-white text-right cursor-pointer hover:text-[#76ABAE] duration-200">Forgot password?</p>
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full bg-[#76ABAE] text-white py-2 rounded hover:bg-[#5e8f91] transition duration-200"
+                    >
+                        Login
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
