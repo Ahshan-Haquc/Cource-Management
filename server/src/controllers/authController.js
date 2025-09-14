@@ -150,9 +150,23 @@ const userLogout = async (req, res) => {
   }
 };
 
+const getUser = (req, res)=>{
+  try {
+    res.status(200).json({
+      success: true,
+      user: req.userInfo,
+      message: "Fetched user info succesfully."
+    })
+  } catch (error) {
+    res.status(500);
+    throw new Error();
+  }
+}
+
 module.exports={
     userLogin,
     userRegister,
     adminRegister,
-    userLogout
+    userLogout,
+    getUser
 }
