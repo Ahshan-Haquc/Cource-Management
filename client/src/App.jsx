@@ -14,6 +14,9 @@ import AddCourse from "./components/AddCourse";
 import EditCourse from "./components/EditCourse";
 import { AuthProvider } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
+import VerifyEmail from "./pages/VerifyEmail";
+import ResendVerification from "./pages/ResendVerification";
+import Verify from "./pages/Verify";
 
 
 function App() {
@@ -27,6 +30,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/adminSignup" element={<AdminSignup />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/verify/:token" element={<Verify />} />
+            <Route path="/resend-verification" element={<ResendVerification />} />
+
             <Route path="/course/:id" element={<CourseDetails />} />
             <Route path="/purchased" element={<PurchasedCourses />} />
             <Route path="/admin" element={<AdminHome />} />

@@ -1,30 +1,57 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
-const UserSchema = mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
-      default: "Our user",
+      trim: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true, 
+      unique: true,
+      lowercase: true,
     },
     password: {
       type: String,
       required: true,
+      minlength: 6,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "admin", "instructor"],
       default: "user",
     },
+    avatar: {
+      type: String,
+      default: "https://i.ibb.co/2n4H4jv/default-avatar.png",
+    },
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+      },
+    ],
+    cart: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+      },
+    ],
+    purchasedCourses: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+      },
+    ],
     tokens: [
       {
-        token: { type: String },
+        token: { type: String, required: true },
       },
     ],
   },

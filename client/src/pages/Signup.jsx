@@ -12,6 +12,7 @@ function Signup() {
 
     const navigate = useNavigate();
     const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,6 +21,7 @@ function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setMessage("");
 
         try {
             const res = await axios.post(
@@ -29,8 +31,11 @@ function Signup() {
             );
 
             if (res.data.success) {
-                alert("Signup successful! Please login now.");
-                navigate("/login");
+                setMessage("Signup successful! Please check your email for verification link.");
+                // Optionally redirect after delay
+                setTimeout(() => {
+                    navigate("/login");
+                }, 5000);
             }
         } catch (err) {
             console.error(err);
@@ -44,6 +49,7 @@ function Signup() {
                 <h2 className="text-2xl font-bold mb-6 text-center">User Signup</h2>
 
                 {error && <p className="text-red-500 mb-3">{error}</p>}
+                {message && <p className="text-green-500 mb-3">{message}</p>}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <input

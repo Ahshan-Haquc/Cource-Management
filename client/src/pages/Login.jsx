@@ -31,12 +31,11 @@ function Login() {
 
             if (res.data.token) {
                 alert("Login successful!");
-                // save token in localStorage
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("role", res.data.user.role);
                 setUser(res.data.user);
-                // Redirect based on role
-                if (res.data.user.role === 'admin') {
+
+                if (res.data.user.role === "admin") {
                     navigate("/admin");
                 } else {
                     navigate("/");
@@ -44,7 +43,12 @@ function Login() {
             }
         } catch (err) {
             console.error(err);
-            setError("Login failed. Try again.");
+            // যদি ব্যাকএন্ড থেকে বলে user verified নয়
+            if (err.response?.data?.message === "Please verify your email first.") {
+                setError("⚠️ Your email is not verified. Please check your inbox.");
+            } else {
+                setError("Login failed. Try again.");
+            }
         }
     };
 
@@ -77,7 +81,9 @@ function Login() {
                             <input type="checkbox" id="remember" className="mr-2" />
                             <label htmlFor="remember" className="text-white">Remember me</label>
                         </div>
-                        <p className="text-sm text-white text-right cursor-pointer hover:text-[#76ABAE] duration-200">Forgot password?</p>
+                        <p className="text-sm text-white text-right cursor-pointer hover:text-[#76ABAE] duration-200">
+                            Forgot password?
+                        </p>
                     </div>
                     <button
                         type="submit"
