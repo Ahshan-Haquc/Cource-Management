@@ -5,72 +5,30 @@ import axios from "axios";
 
 function CourseDetails() {
     const { id } = useParams();
-    const [course, setCourse] = useState(
-        {
-            "title": "Full Stack Web Development",
-            "description": "Dive deep into full-stack web development with the cutting-edge MERN stack (MongoDB, Express, React, Node.js). This comprehensive course will guide you through building robust, scalable, and real-world web applications from scratch, and teach you the essential skills to confidently deploy them into production environments. Master both front-end and back-end technologies to become a versatile web developer.",
-            "category": "Web Development",
-            "price": 200,
-            "thumbnail": "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "instructor": {
-                "name": "Dr. Sarah Johnson",
-                "photo": "https://randomuser.me/api/portraits/women/44.jpg",
-                "bio": "Dr. Sarah Johnson is a distinguished Data Science Expert with over a decade of experience in machine learning and scalable web architectures. She brings a wealth of practical knowledge and a passion for teaching complex concepts in an accessible manner."
-            },
-            "lessons": [
-                { "title": "Introduction to HTML, CSS & Responsive Design", "duration": 15 },
-                { "title": "JavaScript ES6+ Fundamentals & DOM Manipulation", "duration": 20 },
-                { "title": "React.js: Components, State & Props", "duration": 25 },
-                { "title": "Advanced React Hooks & Context API", "duration": 30 },
-                { "title": "Setting up a Node.js & Express Backend", "duration": 30 },
-                { "title": "RESTful API Design & Implementation", "duration": 25 },
-                { "title": "MongoDB: Data Modeling & Mongoose ODM", "duration": 20 },
-                { "title": "Authentication & Authorization with JWT", "duration": 25 },
-                { "title": "Connecting Front-end to Back-end", "duration": 20 },
-                { "title": "Deployment Strategies (Netlify, Heroku, Vercel)", "duration": 15 }
-            ],
-            "objectives": [
-                "Master the MERN stack to build dynamic web applications.",
-                "Develop robust RESTful APIs with Node.js and Express.",
-                "Create interactive user interfaces using React.js.",
-                "Implement secure authentication and authorization.",
-                "Understand database management with MongoDB.",
-                "Deploy full-stack applications to cloud platforms."
-            ],
-            "prerequisites": ["Basic understanding of HTML, CSS, and JavaScript syntax."],
-            "targetAudience": "Aspiring full-stack developers, front-end developers looking to expand to backend, and backend developers interested in React.",
-            "rating": { "average": 4.7, "count": 250 },
-            "faqs": [
-                { "question": "What software/tools will I need?", "answer": "You'll need Node.js, npm/yarn, VS Code, and a web browser. All are free." },
-                { "question": "Is this course suitable for beginners?", "answer": "While it covers advanced topics, the prerequisites are minimal, making it accessible for motivated beginners." },
-                { "question": "How long do I have access to the course content?", "answer": "You get lifetime access to all course materials and future updates." },
-                { "question": "Will I receive a certificate of completion?", "answer": "Yes, a verifiable certificate is issued upon successful completion of all modules and projects." }
-            ]
-        }
-    );
+    const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(false); // Set to false for dummy data
     const [addedToWishlist, setAddedToWishlist] = useState(false);
     const [purchased, setPurchased] = useState(false);
     const [openFAQIndex, setOpenFAQIndex] = useState(null); // State for FAQ accordion
 
     // Uncomment and adapt if you want to fetch real data
-    // useEffect(() => {
-    //     const fetchCourse = async () => {
-    //         setLoading(true);
-    //         try {
-    //             const res = await axios.get(
-    //                 `http://localhost:5000/api/courses/displayOneCourseToUser/${id}`,
-    //                 { withCredentials: true }
-    //             );
-    //             setCourse(res.data.courses[0]);
-    //             setLoading(false);
-    //         } catch (err) {
-    //             console.error("Error fetching course:", err);
-    //             setLoading(false);
-    //         }
-    //     };
-    //     fetchCourse();
-    // }, [id]);
+    useEffect(() => {
+        const fetchCourse = async () => {
+            setLoading(true);
+            try {
+                const res = await axios.get(
+                    `http://localhost:5000/api/courses/displayOneCourseToUser/${id}`,
+                    { withCredentials: true }
+                );
+                setCourse(res.data.courses[0]);
+                setLoading(false);
+            } catch (err) {
+                console.error("Error fetching course:", err);
+                setLoading(false);
+            }
+        };
+        fetchCourse();
+    }, [id]);
 
     const addToWishlist = async () => {
         try {
