@@ -8,7 +8,7 @@ import Testimonials from '../sections/home/Testimonials'
 import HowItWorks from '../sections/home/HowItWorks'
 import InstructorSection from '../sections/home/InstructorSection'
 import CTASection from '../sections/home/CTASection'
-import Home from '../pages/Home'
+import Courses from './Courses'
 
 
 export default function LandingPage() {
@@ -21,7 +21,7 @@ export default function LandingPage() {
             <SearchBarCategories />
 
             {/* 3. Featured Courses */}
-            <Home />
+            <Courses />
 
             {/* 4. Why Choose Us */}
             <WhyChooseUs />
