@@ -10,7 +10,7 @@ import CourseDetails from "./pages/CourseDetails";
 import PurchasedCourses from "./pages/PurchasedCourses";
 import AdminHome from "./pages/AdminHome";
 import AdminSignup from "./pages/AdminSignup"
-import AddCourse from "./components/AddCourse";
+import AddCourse from "./pages/AddCourse";
 import EditCourse from "./components/EditCourse";
 import { AuthProvider } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
