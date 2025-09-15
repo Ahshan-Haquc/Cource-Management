@@ -49,7 +49,7 @@ function Navbar({ user, theme, toggleTheme, cartCount = 0 }) {
                         to="/"
                         className="text-2xl font-extrabold text-[#EEEEEE] hover:text-[#76ABAE] transition-colors duration-200"
                     >
-                        ByteAcademy
+                        DevZone Academy
                     </Link>
                 </div>
 

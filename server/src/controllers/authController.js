@@ -1,114 +1,139 @@
-const UserModel = require('../models/userSchema')
-const bcrypt = require('bcrypt')
+const UserModel = require('../models/userSchema');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const sendEmail = require('../utils/sendEmail');
 
-const userRegister = async (req, res)=>{
-    console.log("Request recieved for signup.")
-    try {
-        const {name, email, password} = req.body;
+// ================== USER REGISTER ==================
+const userRegister = async (req, res) => {
+  console.log("Request recieved for signup.");
+  try {
+    const { name, email, password } = req.body;
 
-        //validating inputs
-        if(!name || !email || !password){
-            res.status(400);
-            throw new Error("Name, Email and password are required");
-        }
-        //checking email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            res.status(400);
-            throw new Error("Invalid email format");
-        }
-        // checking password length
-        if(password.length < 6){
-            res.status(400);
-            throw new Error("Password length must be greater than 6");
-        } 
-
-        //checking if any user registerd with this email then i will not do him signup
-        const isUserExist = await UserModel.findOne({email});
-        if(isUserExist){
-            res.status(400);
-            throw new Error("Please try with another email and password.");
-        }
-
-        //encrypting the password
-        const encryptedPassword = await bcrypt.hash(password, 10)
-
-        const newUser = new UserModel({
-            name,
-            email,
-            password: encryptedPassword
-        })
-        await newUser.save();
-
-        res.status(200).json({success: true, message:"User registered succesfully."})
-    } catch (error) {
-        res.status(500);
-        throw new Error("Server error during signup. Try later.");
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Name, Email and password are required" });
     }
-};
 
-const adminRegister = async (req,res)=>{
-    try {
-        const {email} = req.body;
-        const password = await bcrypt.hash(req.body.password, 10);
-        const role="admin";
-
-    if(!email || !password){
-        res.status(400);
-        throw new Error("Email and password are required");
-    }
-    //checking email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        res.status(400);
-        throw new Error("Invalid email format");
+      return res.status(400).json({ message: "Invalid email format" });
     }
-    const user = await UserModel.findOne({email});
-    if(user){
-        res.status(400).json({success:false, message:"Try with another email account. Admit already exist with this email"});
-    }else{
-        const Admin = new UserModel({
-            email, password, role
-        })
-        const data= await Admin.save();
-        res.status(201).json({success:true, message:"Admin created succesfully"});
-    }
-    } catch (error) {
-        res.status(500)
-        throw new Error("Server error during admin registration.")
-    }
-}
 
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password length must be greater than 6" });
+    }
+
+    const isUserExist = await UserModel.findOne({ email });
+    if (isUserExist) {
+      return res.status(400).json({ message: "Please try with another email and password." });
+    }
+
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new UserModel({
+      name,
+      email,
+      password: encryptedPassword
+    });
+    await newUser.save();
+
+    // Generate verification token
+    const verifyToken = jwt.sign(
+      { id: newUser._id },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+
+    const verifyUrl = `${process.env.SERVER_URL}/api/auth/verify/${verifyToken}`;
+
+    // Send email
+    await sendEmail(
+      newUser.email,
+      "Verify your email",
+      `<h3>Hello ${newUser.name},</h3>
+       <p>Please click the link below to verify your email:</p>
+       <a href="${verifyUrl}">Verify Email</a>`
+    );
+
+    res.status(200).json({ success: true, message: "Signup successful! Please check your email to verify." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error during signup. Try later." });
+  }
+};
+
+// ================== VERIFY EMAIL ==================
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    const user = await UserModel.findById(decoded.id);
+    if (!user) return res.status(400).send("Invalid link");
+
+    user.isVerified = true;
+    await user.save();
+
+    res.send("✅ Email verified successfully! Now you can login.");
+  } catch (err) {
+    res.status(400).send("❌ Invalid or expired token");
+  }
+};
+
+// ================== ADMIN REGISTER ==================
+const adminRegister = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const password = await bcrypt.hash(req.body.password, 10);
+    const role = "admin";
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    const user = await UserModel.findOne({ email });
+    if (user) {
+      return res.status(400).json({ success: false, message: "Admin already exists with this email" });
+    } else {
+      const Admin = new UserModel({ email, password, role });
+      await Admin.save();
+      res.status(201).json({ success: true, message: "Admin created succesfully" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server error during admin registration." });
+  }
+};
+
+// ================== USER LOGIN ==================
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
     }
-    //checking email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        res.status(400);
-        throw new Error("Invalid email format");
-    }
 
     const user = await UserModel.findOne({ email });
     if (!user) return res.status(401).json({ message: "User not found" });
 
+    if (!user.isVerified) {
+      return res.status(401).json({ message: "Please verify your email first" });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ message: "Invalid password" });
 
-    // Generateing JWT token
     const token = await user.generateToken();
 
-    // Setting token in HTTP-only cookie , duration is 1h
     res.cookie("userCookie", token, {
       httpOnly: true,
-      secure: false, 
+      secure: false,
       expires: new Date(Date.now() + 60 * 60 * 1000),
     });
 
-    // Final response with role
     res.status(200).json({
       message: "Login successful",
       token,
@@ -118,24 +143,20 @@ const userLogin = async (req, res) => {
         role: user.role
       },
     });
-    } catch (err) {
-        res.status(500);
-        throw new Error("Server error during login");
-    }
+  } catch (err) {
+    res.status(500).json({ message: "Server error during login" });
+  }
 };
 
+// ================== LOGOUT ==================
 const userLogout = async (req, res) => {
-  console.log("Request recieved for logout.");
   try {
-    console.log(req.userInfo._id);
     const user = await UserModel.findOne({ _id: req.userInfo._id });
 
-    if(!user) return res.status(401).json({success: false, message: "Please become valid user first."})
+    if (!user) return res.status(401).json({ success: false, message: "Invalid user" });
 
-    if (user) {
-      user.tokens = [];
-      await user.save();
-    }
+    user.tokens = [];
+    await user.save();
 
     res.clearCookie("userCookie", {
       httpOnly: true,
@@ -145,28 +166,28 @@ const userLogout = async (req, res) => {
 
     return res.status(200).json({ success: true, message: "Logout successful" });
   } catch (error) {
-    res.status(500)
-    throw new Error(error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-const getUser = (req, res)=>{
+// ================== GET USER ==================
+const getUser = (req, res) => {
   try {
     res.status(200).json({
       success: true,
       user: req.userInfo,
       message: "Fetched user info succesfully."
-    })
+    });
   } catch (error) {
-    res.status(500);
-    throw new Error();
+    res.status(500).json({ message: "Server error" });
   }
-}
+};
 
-module.exports={
-    userLogin,
-    userRegister,
-    adminRegister,
-    userLogout,
-    getUser
-}
+module.exports = {
+  userLogin,
+  userRegister,
+  adminRegister,
+  userLogout,
+  getUser,
+  verifyEmail
+};
