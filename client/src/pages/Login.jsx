@@ -1,7 +1,7 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
@@ -81,9 +81,9 @@ function Login() {
                             <input type="checkbox" id="remember" className="mr-2" />
                             <label htmlFor="remember" className="text-white">Remember me</label>
                         </div>
-                        <p className="text-sm text-white text-right cursor-pointer hover:text-[#76ABAE] duration-200">
+                        <Link to={'/forgot-password'} className="text-sm text-white text-right cursor-pointer hover:text-[#76ABAE] duration-200">
                             Forgot password?
-                        </p>
+                        </Link>
                     </div>
                     <button
                         type="submit"
