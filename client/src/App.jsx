@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import AppLayout from "./layout/AppLayout";
-import Home from "./pages/Home";
+import Courses from "./pages/Courses"; // Home means see all courses page
 import CourseDetails from "./pages/CourseDetails";
 import PurchasedCourses from "./pages/PurchasedCourses";
 import AdminHome from "./pages/AdminHome";
@@ -19,6 +19,7 @@ import ResendVerification from "./pages/ResendVerification";
 import Verify from "./pages/Verify";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import About from "./pages/About";
 
 
 function App() {
@@ -39,7 +40,9 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
 
+            <Route path="/courses" element={<Courses />} />
             <Route path="/course/:id" element={<CourseDetails />} />
+            <Route path="/about" element={<About />} />
             <Route path="/purchased" element={<PurchasedCourses />} />
             <Route path="/admin" element={<AdminHome />} />
             <Route path="/admin/add-course" element={<AddCourse />} />

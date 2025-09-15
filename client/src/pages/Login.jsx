@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { User, CheckCircle, XCircle, TabletSmartphone } from "lucide-react";
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -10,7 +11,6 @@ function Login() {
         password: ""
     });
     const { setUser } = useAuth();
-
     const navigate = useNavigate();
     const [error, setError] = useState("");
 
@@ -21,7 +21,6 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-
         try {
             const res = await axios.post(
                 "http://localhost:5000/api/auth/userLogin",
@@ -30,7 +29,6 @@ function Login() {
             );
 
             if (res.data.token) {
-                alert("Login successful!");
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("role", res.data.user.role);
                 setUser(res.data.user);
@@ -43,55 +41,93 @@ function Login() {
             }
         } catch (err) {
             console.error(err);
-            // যদি ব্যাকএন্ড থেকে বলে user verified নয়
+            // Handle backend errors for unverified email or others
             if (err.response?.data?.message === "Please verify your email first.") {
-                setError("⚠️ Your email is not verified. Please check your inbox.");
+                setError("Your email is not verified. Please check your inbox.");
             } else {
-                setError("Login failed. Try again.");
+                setError("Login failed. Check your credentials and try again.");
             }
         }
     };
 
     return (
-        <div className="w-screen h-[90vh] flex items-center">
-            <div className="max-w-md mx-auto bg-[#31363F] text-[#EEEEEE] p-8 shadow-lg rounded">
-                <h2 className="text-2xl font-bold mb-6 text-center">User Login</h2>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#222831] to-[#31363F] text-[#EEEEEE] p-4">
+            <div className="w-full max-w-5xl bg-[#222831] shadow-2xl rounded-3xl overflow-hidden flex flex-col md:flex-row">
+                {/* Left Section: Welcome Message */}
+                <div className="hidden md:flex md:w-1/2 bg-[#31363F] p-10 items-center justify-center text-center">
+                    <div className="flex flex-col items-center">
+                        <TabletSmartphone size={100} className="text-[#76ABAE] mb-6 drop-shadow-lg animate-pulse" />
+                        <h1 className="text-4xl font-extrabold mb-2 tracking-tight">Welcome Back!</h1>
+                        <p className="text-lg text-gray-400 max-w-xs">
+                            Sign in to continue your learning journey and access your courses.
+                        </p>
+                    </div>
+                </div>
 
-                {error && <p className="text-red-500 mb-3">{error}</p>}
+                {/* Right Section: Login Form */}
+                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                    <div className="flex flex-col items-center mb-6">
+                        <User size={48} className="text-[#76ABAE] mb-4" />
+                        <h2 className="text-3xl font-bold mb-2">User Login</h2>
+                        <p className="text-gray-400">Access your account</p>
+                    </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded"
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Enter your password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded"
-                    />
-                    <div className="flex justify-between items-center">
-                        <div className="">
-                            <input type="checkbox" id="remember" className="mr-2" />
-                            <label htmlFor="remember" className="text-white">Remember me</label>
+                    {error && (
+                        <div className="bg-red-700 p-3 rounded-lg flex items-center gap-2 mb-4">
+                            <XCircle size={20} />
+                            <p className="text-sm font-medium">{error}</p>
                         </div>
-                        <Link to={'/forgot-password'} className="text-sm text-white text-right cursor-pointer hover:text-[#76ABAE] duration-200">
-                            Forgot password?
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="relative">
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="w-full p-4 bg-transparent border-2 border-[#31363F] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#76ABAE] transition-colors"
+                                required
+                            />
+                        </div>
+                        <div className="relative">
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                className="w-full p-4 bg-transparent border-2 border-[#31363F] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#76ABAE] transition-colors"
+                                required
+                            />
+                        </div>
+
+                        <div className="flex justify-between items-center text-sm">
+                            <label htmlFor="remember" className="flex items-center text-gray-400">
+                                <input type="checkbox" id="remember" className="mr-2 accent-[#76ABAE]" />
+                                Remember me
+                            </label>
+                            <Link to={'/forgot-password'} className="text-[#76ABAE] hover:text-white transition-colors">
+                                Forgot password?
+                            </Link>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full py-4 bg-[#76ABAE] text-[#222831] font-bold rounded-lg shadow-md hover:bg-[#5e8f91] transition-colors"
+                        >
+                            Login
+                        </button>
+                    </form>
+
+                    <div className="mt-6 text-center text-gray-400 text-sm">
+                        Don't have an account?{" "}
+                        <Link to="/signup" className="text-[#76ABAE] hover:text-white transition-colors">
+                            Sign up
                         </Link>
                     </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-[#76ABAE] text-white py-2 rounded hover:bg-[#5e8f91] transition duration-200"
-                    >
-                        Login
-                    </button>
-                </form>
+                </div>
             </div>
         </div>
     );
