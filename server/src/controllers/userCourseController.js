@@ -1,5 +1,6 @@
 const CourseModel = require('../models/courceSchema')
-const PurchaseModel = require('../models/purchesSchema')
+const PurchaseModel = require('../models/purchesSchema');
+const UserModel = require('../models/userSchema');
 
 const displayAllCourseToUser = async (req, res)=>{
     console.log("Request recieved for display all course to user");
@@ -125,10 +126,106 @@ const deleteUserPurchasedCourse = async (req, res) => {
     }
 }
 
+const addToCart = async (req, res)=>{
+    console.log("Request recieved for add to cart.")
+    try {
+        const {courseId} = req.params;
+
+        if(!courseId) return res.status(400).json({success: false, message:"Course id required."})
+
+        const user = await UserModel.findById(req.userInfo._id);
+        if(!user) return res.status(401).json({success: false, message:"User not found. Please login first."})
+
+        if(user.cart.includes(courseId)) return res.status(400).json({success: false, message:"Course already in your cart."})
+
+        user.cart.push(courseId);
+        await user.save();
+
+        res.status(200).json({success: true, message:"Course added to your cart."})
+    } catch (error) {
+        res.status(500);
+        throw new Error("Server error while adding course to your cart");
+    }
+}
+const removeFromCart = async (req, res)=>{
+    console.log("Request recieved for remove from cart.")
+    try {
+        const {courseId} = req.params;
+        if(!courseId) return res.status(400).json({success: false, message:"Course id required."})
+
+        const user = await UserModel.findById(req.userInfo._id);
+        if(!user) return res.status(401).json({success: false, message:"User not found. Please login first."})
+
+        if(!user.cart.includes(courseId)) return res.status(400).json({success: false, message:"Course not found in your cart."})
+
+        user.cart = user.cart.filter(id => id.toString() !== courseId);
+        await user.save();
+
+        res.status(200).json({success: true, message:"Course removed from your cart."})
+    } catch (error) {
+        res.status(500);
+        throw new Error("Server error while removing course from your cart");
+    }
+}
+
+const showAllCartCourse = async (req, res)=>{
+    console.log("Request recieved for showing all cart coursed.")
+    try {
+        const user = await UserModel.findById(req.userInfo._id);
+        const userCoursesInCart = [];
+        
+        for(const courseId of user.cart){
+            const course = await CourseModel.findById(courseId); // fetch only required fields
+            if(course) userCoursesInCart.push(course);
+        }
+
+        res.status(200).json({success: true, courses: userCoursesInCart});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({success: false, message:"Server error while fetching cart courses."});
+    }
+}
+
+const addToWishList = async (req, res)=>{
+console.log("Request recieved for add to wishlist.")
+    try {
+        const {courseId} = req.params;
+
+        if(!courseId) return res.status(400).json({success: false, message:"Course id required."})
+
+        const user = await UserModel.findById(req.userInfo._id);
+        if(!user) return res.status(401).json({success: false, message:"User not found. Please login first."})
+
+        if(user.wishlist.includes(courseId)){
+            //remove from wishlist
+            user.wishlist = user.wishlist.filter(id => id.toString() !== courseId);
+            await user.save();
+            return res.status(200).json({success: true, message:"Course removed from your wish-list."})
+        } 
+
+        user.wishlist.push(courseId);
+        await user.save();
+
+        res.status(200).json({success: true, message:"Course added to your wish-list."})
+    } catch (error) {
+        res.status(500);
+        throw new Error("Server error while adding course to your cart");
+    }
+}
+
+const showAllWishListCourse = async (req, res)=>{
+    
+}
+
 module.exports={
     displayAllCourseToUser,
     displayOneCourseToUser,
     purchaseCourse,
     seeUserPurchasedCourses,
-    deleteUserPurchasedCourse
+    deleteUserPurchasedCourse,
+    addToCart,
+    removeFromCart,
+    showAllCartCourse,
+    addToWishList,
+    showAllWishListCourse
 }

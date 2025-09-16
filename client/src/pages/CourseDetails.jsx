@@ -45,17 +45,21 @@ function CourseDetails() {
         }
     };
 
-    const purchaseCourse = async () => {
+    // Purchase course
+    const handlePurchase = async (id) => {
         try {
-            // await axios.get(
-            //     `http://localhost:5000/api/courses/purchaseCourse/${id}`,
-            //     { withCredentials: true }
-            // );
-            setPurchased(true);
-            alert("Course purchased successfully!");
-        } catch (err) {
-            console.error(err);
-            alert("Error purchasing course.");
+            const res = await axios.get(
+                `http://localhost:5000/api/courses/purchaseCourse/${id}`,
+                { withCredentials: true }
+            );
+
+            if (res.data.success) {
+                setPurchased(true);
+                alert("Course purchased successfully!");
+            }
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Purchase failed.");
         }
     };
 
