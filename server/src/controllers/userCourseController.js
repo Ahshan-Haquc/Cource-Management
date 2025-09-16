@@ -136,7 +136,7 @@ const addToCart = async (req, res)=>{
         const user = await UserModel.findById(req.userInfo._id);
         if(!user) return res.status(401).json({success: false, message:"User not found. Please login first."})
 
-        if(user.cart.includes(courseId)) return res.status(400).json({success: false, message:"Course already in your cart."})
+        if(user.cart.includes(courseId)) return res.status(200).json({success: false, message:"Course already in your cart."})
 
         user.cart.push(courseId);
         await user.save();
@@ -168,23 +168,32 @@ const removeFromCart = async (req, res)=>{
     }
 }
 
-const showAllCartCourse = async (req, res)=>{
-    console.log("Request recieved for showing all cart coursed.")
-    try {
-        const user = await UserModel.findById(req.userInfo._id);
-        const userCoursesInCart = [];
-        
-        for(const courseId of user.cart){
-            const course = await CourseModel.findById(courseId); // fetch only required fields
-            if(course) userCoursesInCart.push(course);
-        }
+const showAllCartCourse = async (req, res) => {
+  console.log("Request received for showing all cart courses.");
+  try {
+    const user = await UserModel.findById(req.userInfo._id);
 
-        res.status(200).json({success: true, courses: userCoursesInCart});
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({success: false, message:"Server error while fetching cart courses."});
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found." });
     }
-}
+
+    // Fetch courses with limited fields (for cart display)
+    const userCoursesInCart = await CourseModel.find({
+      _id: { $in: user.cart },
+    }).select("title price thumbnail category instructor rating lessons");
+
+    res.status(200).json({
+      success: true,
+      courses: userCoursesInCart,
+    });
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching cart courses.",
+    });
+  }
+};
 
 const addToWishList = async (req, res)=>{
 console.log("Request recieved for add to wishlist.")

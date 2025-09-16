@@ -23,10 +23,10 @@ courseRouter.get('/purchaseCourse/:id', authenticateUserAccess, purchaseCourse);
 courseRouter.get('/seeUserPurchasedCourses', authenticateUserAccess, seeUserPurchasedCourses);
 courseRouter.delete('/deleteUserPurchasedCourse/:courseId', authenticateUserAccess, deleteUserPurchasedCourse);
 
-courseRouter.post('/addToCart/:courseId',authenticateUserAccess, addToCart)
-courseRouter.post('/removeFromCart/:courseId',authenticateUserAccess, removeFromCart)
-courseRouter.get('/showAllCartCourse',authenticateUserAccess, showAllCartCourse)
-courseRouter.post('/addToWishList/:courseId',authenticateUserAccess, addToWishList); // if course is exist in users wishlist then by the same router course will remove means toggle
+courseRouter.get('/addToCart/:courseId',authenticateUserAccess, addToCart)
+courseRouter.get('/removeFromCart/:courseId',authenticateUserAccess, removeFromCart)
+courseRouter.get('/cart',authenticateUserAccess, showAllCartCourse)
+courseRouter.get('/addToWishList/:courseId',authenticateUserAccess, addToWishList); // if course is exist in users wishlist then by the same router course will remove means toggle
 courseRouter.get('/showAllWishListCourse',authenticateUserAccess, showAllWishListCourse)
 
 //admin course routers
