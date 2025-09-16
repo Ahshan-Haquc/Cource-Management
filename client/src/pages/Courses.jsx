@@ -25,22 +25,13 @@ function Home() {
         fetchCourses();
     }, []);
 
-    // Purchase course
-    const handlePurchase = async (id) => {
+    const handleAddToCart = async (id) => {
         try {
-            const res = await axios.get(
-                `http://localhost:5000/api/courses/purchaseCourse/${id}`,
-                { withCredentials: true }
-            );
 
-            if (res.data.success) {
-                alert("Course purchased successfully!");
-            }
         } catch (error) {
-            console.error(error);
-            alert(error.response?.data?.message || "Purchase failed.");
+
         }
-    };
+    }
 
     return (
         <div className="min-h-screen bg-[#222831] p-8">

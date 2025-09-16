@@ -17,8 +17,8 @@ const FAQSchema = new mongoose.Schema({
 });
 
 const RatingSchema = new mongoose.Schema({
-  average: { type: Number, default: 0 },
-  count: { type: Number, default: 0 }
+  average: { type: Number, default: 5 },
+  count: { type: Number, default: 5 }
 });
 
 const CourseSchema = new mongoose.Schema(
