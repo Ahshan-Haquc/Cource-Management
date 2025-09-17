@@ -10,7 +10,7 @@ import { useCart } from "../context/CartContext";
 function CartPage() {
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
-    const { cart, setCart } = useCart();
+    const { cart, setCart, handleRemoveFromCart } = useCart();
 
     const fetchCart = async () => {
         try {
@@ -28,22 +28,7 @@ function CartPage() {
         fetchCart();
     }, []);
 
-    const handleRemoveFromCart = async (id) => {
-        try {
-            const res = await axios.get(
-                `http://localhost:5000/api/courses/removeFromCart/${id}`,
-                { withCredentials: true }
-            );
 
-            if (res.data.success) {
-                fetchCart();
-                alert("Course removed from your cart successfully!");
-            }
-        } catch (error) {
-            console.error(error);
-            alert(error.response?.data?.message || "Remove from cart failed.");
-        }
-    }
 
     const handleAddAndRemoveFromWishList = async (id) => {
         try {

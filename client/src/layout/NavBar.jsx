@@ -1,5 +1,5 @@
 // src/components/Navbar.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import {
@@ -29,6 +29,11 @@ function Navbar({ user, theme, toggleTheme, cartCount = 2 }) {
     const ThemeIcon = theme === "light" ? Sun : Moon;
 
     const [isProfileIconVisible, setIsProfileIconVisible] = useState(false);
+
+    // useEffect(() => {
+    //     console.log("navBar is running")
+    //     fetchCart()
+    // })
 
     const logout = async () => {
         localStorage.removeItem("token");
