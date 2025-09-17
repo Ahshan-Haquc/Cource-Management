@@ -20,38 +20,38 @@ import Verify from "./pages/Verify";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import About from "./pages/About";
+import CartPage from "./pages/CartPage";
 
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<AppLayout />}>
-            {/* <Route index element={<Home />} /> */}
-            <Route index element={<LandingPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/adminSignup" element={<AdminSignup />} />
+    <Router>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          {/* <Route index element={<Home />} /> */}
+          <Route index element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/adminSignup" element={<AdminSignup />} />
 
-            <Route path="/verify-email" element={<VerifyEmail />} />
-            <Route path="/verify/:token" element={<Verify />} />
-            <Route path="/resend-verification" element={<ResendVerification />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/verify/:token" element={<Verify />} />
+          <Route path="/resend-verification" element={<ResendVerification />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/course/:id" element={<CourseDetails />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/purchased" element={<PurchasedCourses />} />
-            <Route path="/admin" element={<AdminHome />} />
-            <Route path="/admin/add-course" element={<AddCourse />} />
-            <Route path="/admin/edit-course/:id" element={<EditCourse />} />
-            <Route path="*" element={<div className="text-center text-white">404 Not Found</div>} />
-          </Route>
-        </Routes>
-      </Router>
-    </AuthProvider>
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/course/:id" element={<CourseDetails />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/purchased" element={<PurchasedCourses />} />
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/add-course" element={<AddCourse />} />
+          <Route path="/admin/edit-course/:id" element={<EditCourse />} />
+          <Route path="*" element={<div className="text-center text-white">404 Not Found</div>} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
