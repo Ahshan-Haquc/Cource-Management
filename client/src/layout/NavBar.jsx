@@ -17,10 +17,12 @@ import {
     UserRound
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 
-function Navbar({ user, theme, toggleTheme, cartCount = 0 }) {
+function Navbar({ user, theme, toggleTheme, cartCount = 2 }) {
     const { setUser } = useAuth();
+    const { cart } = useCart();
     const isAdmin = user?.role === "admin";
     const isUser = user?.role === "user";
 
@@ -117,9 +119,9 @@ function Navbar({ user, theme, toggleTheme, cartCount = 0 }) {
                                 className="relative hover:text-[#76ABAE] transition-transform duration-200 transform hover:scale-110"
                             >
                                 <ShoppingCart size={22} />
-                                {cartCount > 0 && (
+                                {cart.length > 0 && (
                                     <span className="absolute -top-2 -right-2 bg-[#76ABAE] text-[#222831] text-xs font-bold px-1.5 py-0.5 rounded-full">
-                                        {cartCount}
+                                        {cart.length}
                                     </span>
                                 )}
                             </Link>

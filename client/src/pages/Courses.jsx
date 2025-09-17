@@ -3,10 +3,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Heart, ShoppingCart, Star } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { FaHeart } from "react-icons/fa";
+import { useCart } from "../context/CartContext";
 
 function Home() {
+    const { addToCart } = useCart();
     const [courses, setCourses] = useState([]);
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const { addItem, removeItem } = useCart();
 
     // Fetch all courses
     useEffect(() => {
@@ -27,9 +33,35 @@ function Home() {
 
     const handleAddToCart = async (id) => {
         try {
+            const res = await axios.get(
+                `http://localhost:5000/api/courses/addToCart/${id}`,
+                { withCredentials: true }
+            );
 
+            if (res.data.success) {
+                addItem(id); // Use context method
+                alert("Course added to your cart successfully!");
+            }
         } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Add to cart failed.");
+        }
+    };
 
+
+    const handleAddAndRemoveFromWishList = async (id) => {
+        try {
+            const res = await axios.get(
+                `http://localhost:5000/api/courses/addToWishList/${id}`,
+                { withCredentials: true }
+            );
+
+            if (res.data.success) {
+                alert(res.data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Add to cart failed.");
         }
     }
 
@@ -55,7 +87,7 @@ function Home() {
                                             <img src="https://res.cloudinary.com/dxrvqdrn2/image/upload/v1757872744/blended-learning_lib5zw.png" alt="" />
                                         </div>
                                         <div className="h-fit flex items-center gap-1 text-sm bg-gray-700/50 px-3 py-1 rounded-full">
-                                            <span className="text-[#76ABAE] text-xl font-bold">5</span> <Star className="text-[#76ABAE]" />
+                                            <span className="text-[#76ABAE] text-xl font-bold">{course.rating.count}</span> <Star className="text-[#76ABAE]" />
                                         </div>
                                     </div>
                                     <h3 className="text-3xl font-bold tracking-tight text-[#EEEEEE] mb-2 group-hover:text-[#76ABAE] transition-colors duration-300">
@@ -86,14 +118,18 @@ function Home() {
                                         View Course
                                     </button>
                                     <button
-                                        onClick={() => handleAddToWishlist(course._id)}
+                                        onClick={() => handleAddAndRemoveFromWishList(course._id)}
                                         className="h-full w-1/5 text-[#222831] font-semibold p-2 hover:bg-white/20 transition-colors duration-300  flex items-center justify-center hover:cursor-pointer" title="Add to wish-list"
-                                        aria-label="Add to Wishlist"
+                                        aria-label={user && user?.wishlist?.includes(course._id) ? "Remove from Wish-list" : "Add to Wish-list"}
                                     >
-                                        <Heart size={22} />
+                                        {user && user?.wishlist?.includes(course._id) ? (
+                                            <FaHeart size={22} className="text-white" />
+                                        ) : (
+                                            <Heart size={22} />
+                                        )}
                                     </button>
                                     <button
-                                        onClick={() => handleAddToCart(course._id)}
+                                        onClick={() => addToCart(course._id)}
                                         className="h-full w-1/5 text-[#222831] font-semibold p-2 hover:bg-white/20 transition-colors duration-300  flex items-center justify-center hover:cursor-pointer" title="Add to cart"
                                         aria-label="Add to Cart"
                                     >

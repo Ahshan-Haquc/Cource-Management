@@ -216,7 +216,7 @@ function CourseDetails() {
 
                         {/* Actions */}
                         <button
-                            onClick={purchaseCourse}
+                            onClick={handlePurchase}
                             disabled={purchased}
                             className={`w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#76ABAE] text-[#222831] font-bold rounded-lg shadow-lg hover:bg-[#5e8f91] transition-all duration-300 transform hover:-translate-y-1 ${purchased ? "opacity-70 cursor-not-allowed" : ""}`}
                         >
