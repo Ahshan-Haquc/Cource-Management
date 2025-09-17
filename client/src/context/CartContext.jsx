@@ -5,6 +5,7 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
+    const [cartWhenUserOffline, setCartWhenUserOffline] = useState([]);
 
     const fetchCart = async () => {
         try {
@@ -16,8 +17,9 @@ export const CartProvider = ({ children }) => {
     };
     // Fetch cart when app loads
     useEffect(() => {
+        console.log("context loaded 2")
         fetchCart();
-    }, [cart]);
+    }, []);
 
     const addToCart = async (courseId) => {
         try {
@@ -38,8 +40,25 @@ export const CartProvider = ({ children }) => {
         }
     };
 
+    const handleRemoveFromCart = async (id) => {
+        try {
+            const res = await axios.get(
+                `http://localhost:5000/api/courses/removeFromCart/${id}`,
+                { withCredentials: true }
+            );
+
+            if (res.data.success) {
+                fetchCart();
+                alert("Course removed from your cart successfully!");
+            }
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.message || "Remove from cart failed.");
+        }
+    }
+
     return (
-        <CartContext.Provider value={{ cart, setCart, addToCart }}>
+        <CartContext.Provider value={{ cart, setCart, fetchCart, addToCart, handleRemoveFromCart }}>
             {children}
         </CartContext.Provider>
     );
