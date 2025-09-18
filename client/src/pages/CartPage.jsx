@@ -15,11 +15,7 @@ function CartPage() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (user) {
-            setFinalCart(cart);
-        } else {
-            setFinalCart(cartWhenUserNotLogedIn);
-        }
+        setFinalCart(cart);
     }, [user, cart, cartWhenUserNotLogedIn]);
 
     const fetchCart = async () => {
@@ -37,10 +33,12 @@ function CartPage() {
 
     useEffect(() => {
         user && fetchCart();
-        if (!user) {
-            alert("Please login to see and merge you carts");
-            navigate('/login');
-        }
+        // if (!user) {
+        //     alert("Please login to see and merge you carts");
+        //     navigate('/login');
+        // }
+        !user && fetchCartWhenUserNotLogedIn();
+        console.log("here : ", cartWhenUserNotLogedIn);
     }, []);
 
 
