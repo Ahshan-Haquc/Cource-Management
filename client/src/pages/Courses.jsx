@@ -6,9 +6,12 @@ import { Heart, ShoppingCart, Star } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { FaHeart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
+import { useWishList } from "../context/WishListContext";
+
 
 function Home() {
     const { addToCart } = useCart();
+    const { toggleWishList } = useWishList();
     const [courses, setCourses] = useState([]);
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -31,39 +34,6 @@ function Home() {
         fetchCourses();
     }, []);
 
-    const handleAddToCart = async (id) => {
-        try {
-            const res = await axios.get(
-                `http://localhost:5000/api/courses/addToCart/${id}`,
-                { withCredentials: true }
-            );
-
-            if (res.data.success) {
-                addItem(id); // Use context method
-                alert("Course added to your cart successfully!");
-            }
-        } catch (error) {
-            console.error(error);
-            alert(error.response?.data?.message || "Add to cart failed.");
-        }
-    };
-
-
-    const handleAddAndRemoveFromWishList = async (id) => {
-        try {
-            const res = await axios.get(
-                `http://localhost:5000/api/courses/addToWishList/${id}`,
-                { withCredentials: true }
-            );
-
-            if (res.data.success) {
-                alert(res.data.message);
-            }
-        } catch (error) {
-            console.error(error);
-            alert(error.response?.data?.message || "Add to cart failed.");
-        }
-    }
 
     return (
         <div className="min-h-screen bg-[#222831] p-8">
@@ -118,7 +88,7 @@ function Home() {
                                         View Course
                                     </button>
                                     <button
-                                        onClick={() => handleAddAndRemoveFromWishList(course._id)}
+                                        onClick={() => toggleWishList(course._id)}
                                         className="h-full w-1/5 text-[#222831] font-semibold p-2 hover:bg-white/20 transition-colors duration-300  flex items-center justify-center hover:cursor-pointer" title="Add to wish-list"
                                         aria-label={user && user?.wishlist?.includes(course._id) ? "Remove from Wish-list" : "Add to Wish-list"}
                                     >

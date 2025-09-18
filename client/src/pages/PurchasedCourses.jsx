@@ -4,22 +4,20 @@ import axios from "axios";
 
 function PurchasedCourses() {
     const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     // Fetch purchased courses
     useEffect(() => {
         const fetchPurchasedCourses = async () => {
             try {
+                setLoading(true);
                 const res = await axios.get(
                     "http://localhost:5000/api/courses/seeUserPurchasedCourses",
                     { withCredentials: true }
                 );
-                console.log("Purchased courses response:", res.data);
                 if (res.data.success) {
                     setCourses(res.data.courses);
                 } else {
-                    console.log("Failed to fetch purchased courses");
-                    console.log(res.data.message);
                     alert(res.data.message);
                 }
             } catch (error) {

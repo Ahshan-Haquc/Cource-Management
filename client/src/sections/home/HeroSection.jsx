@@ -1,13 +1,14 @@
 // src/components/Landing/HeroSection.jsx
 import React from "react";
 import { Link } from "react-router-dom";
+import HeroTitle from "../../components/HeroTitle";
 
 function HeroSection() {
     return (
         <section
             className="relative h-[90vh] flex items-center justify-center text-center overflow-hidden py-20"
             style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1580816990425-9c9250f22378?q=80&w=2070&auto=format&fit=crop')`,
+                backgroundImage: `url('https://images.pexels.com/photos/919734/pexels-photo-919734.jpeg')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}
@@ -17,9 +18,10 @@ function HeroSection() {
 
             {/* Main Content */}
             <div className="relative z-10 container mx-auto px-6 max-w-4xl text-[#EEEEEE]">
-                <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-lg">
+                {/* <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-lg">
                     Stack up your skills like a <span className="text-[#76ABAE]">developer</span>.
-                </h1>
+                </h1> */}
+                <HeroTitle />
                 <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
                     Explore high-quality courses taught by industry experts. Gain new skills and level up your career with lifetime access and dedicated community support.
                 </p>

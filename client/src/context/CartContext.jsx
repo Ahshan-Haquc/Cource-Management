@@ -9,7 +9,6 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [cartWhenUserNotLogedIn, setCartWhenUserNotLogedIn] = useState([]);
 
-    // প্রথমবার লোড হলে localStorage থেকে restore
     useEffect(() => {
         const savedGuestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
 
@@ -18,7 +17,7 @@ export const CartProvider = ({ children }) => {
         }
     }, []);
 
-    // guestCart localStorage এ সেভ করা
+    // guestCart localStorage
     useEffect(() => {
         localStorage.setItem("guestCart", JSON.stringify(cartWhenUserNotLogedIn));
     }, [cartWhenUserNotLogedIn]);
@@ -27,6 +26,7 @@ export const CartProvider = ({ children }) => {
     // Fetch logged-in cart from DB
     const fetchCart = async () => {
         try {
+            console.log("calling")
             const res = await axios.get("http://localhost:5000/api/courses/cart", { withCredentials: true });
             if (res.data.success) setCart(res.data.courses);
         } catch (err) {
@@ -43,6 +43,7 @@ export const CartProvider = ({ children }) => {
             const res = await axios.post("http://localhost:5000/api/courses/cart/guest", { courseIds });
             if (res.data.success) {
                 setCart(res.data.courses); // reuse the same `cart` for UI
+
             }
         } catch (err) {
             console.error("Error fetching guest cart:", err);
@@ -73,14 +74,22 @@ export const CartProvider = ({ children }) => {
     };
 
     // Watch user login/logout
+    // useEffect(() => {
+    //     if (user) {
+    //         mergeGuestCartIntoUserCart();
+    //         fetchCart();
+    //     } else {
+    //         fetchCartWhenUserNotLogedIn();
+    //     }
+    // }, [user, cart, cartWhenUserNotLogedIn]);
+    // Watch user login/logout
     useEffect(() => {
         if (user) {
             mergeGuestCartIntoUserCart();
-            fetchCart();
         } else {
             fetchCartWhenUserNotLogedIn();
         }
-    }, [user, cart, cartWhenUserNotLogedIn]);
+    }, [user]);
 
     // Add to cart
     const addToCart = async (courseId) => {

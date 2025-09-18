@@ -11,7 +11,8 @@ const {
     showAllCartCourseWhenUserNotLogedIn,
     mergeGuestCart,
     addToWishList,
-    showAllWishListCourse
+    showAllWishListCourse,
+    searchForCourse
 } = require('../controllers/userCourseController')
 const {addNewCourse, deleteCourse, editCourseInfo} = require('../controllers/adminCourseController')
 const authenticateUserAccess = require('../middlewares/accessPermission') // i am adding this 'authenticateUserAccess' so that i can prevent unauthorize user access
@@ -24,6 +25,7 @@ courseRouter.get('/displayOneCourseToUser/:id', displayOneCourseToUser);
 courseRouter.get('/purchaseCourse/:id', authenticateUserAccess, purchaseCourse);
 courseRouter.get('/seeUserPurchasedCourses', authenticateUserAccess, seeUserPurchasedCourses);
 courseRouter.delete('/deleteUserPurchasedCourse/:courseId', authenticateUserAccess, deleteUserPurchasedCourse);
+courseRouter.get('/search', searchForCourse);
 
 courseRouter.get('/addToCart/:courseId',authenticateUserAccess, addToCart)
 courseRouter.get('/removeFromCart/:courseId',authenticateUserAccess, removeFromCart)
