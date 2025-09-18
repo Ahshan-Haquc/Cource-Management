@@ -9,6 +9,21 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [cartWhenUserNotLogedIn, setCartWhenUserNotLogedIn] = useState([]);
 
+    // প্রথমবার লোড হলে localStorage থেকে restore
+    useEffect(() => {
+        const savedGuestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
+
+        if (savedGuestCart.length > 0) {
+            setCartWhenUserNotLogedIn(savedGuestCart);
+        }
+    }, []);
+
+    // guestCart localStorage এ সেভ করা
+    useEffect(() => {
+        localStorage.setItem("guestCart", JSON.stringify(cartWhenUserNotLogedIn));
+    }, [cartWhenUserNotLogedIn]);
+
+
     // Fetch logged-in cart from DB
     const fetchCart = async () => {
         try {
@@ -34,7 +49,7 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    //  Merge guest cart into user cart after login
+    // Merge guest cart into user cart after login
     const mergeGuestCartIntoUserCart = async () => {
         if (cartWhenUserNotLogedIn.length === 0) return;
 
@@ -49,6 +64,7 @@ export const CartProvider = ({ children }) => {
 
             if (res.data.success) {
                 setCartWhenUserNotLogedIn([]); // clear guest cart
+                localStorage.removeItem("guestCart"); // guest cart clear localStorage থেকেও
                 fetchCart(); // refresh DB cart
             }
         } catch (err) {
@@ -64,7 +80,7 @@ export const CartProvider = ({ children }) => {
         } else {
             fetchCartWhenUserNotLogedIn();
         }
-    }, [user]);
+    }, [user, cart, cartWhenUserNotLogedIn]);
 
     // Add to cart
     const addToCart = async (courseId) => {
@@ -93,8 +109,6 @@ export const CartProvider = ({ children }) => {
             alert("Course added in your cart.");
         }
     };
-
-
 
     // Remove from cart
     const handleRemoveFromCart = async (courseId) => {

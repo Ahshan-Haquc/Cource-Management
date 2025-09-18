@@ -22,7 +22,7 @@ import { useCart } from "../context/CartContext";
 
 function Navbar() {
     const { user, setUser } = useAuth();
-    const { cart, cartWhenUserNotLogedIn } = useCart();
+    const { cart, cartWhenUserNotLogedIn, setCartWhenUserNotLogedIn } = useCart();
     const isAdmin = user?.role === "admin";
     const isUser = user?.role === "user";
 
@@ -35,6 +35,7 @@ function Navbar() {
         const res = await axios.get("http://localhost:5000/api/auth/logout", { withCredentials: true });
         if (res.data.success) {
             setUser(null);
+            setCartWhenUserNotLogedIn([]);
             window.location.href = "/login";
         } else {
             alert("Logout failed. Please try again.");
