@@ -21,6 +21,11 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import About from "./pages/About";
 import CartPage from "./pages/CartPage";
+import WishListPage from "./pages/WishListPage";
+import NotificationPage from "./pages/NotificationPage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import ContactPage from "./pages/ContactPage";
 
 
 function App() {
@@ -42,8 +47,15 @@ function App() {
 
           <Route path="/courses" element={<Courses />} />
           <Route path="/course/:id" element={<CourseDetails />} />
-          <Route path="/about" element={<About />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/wishlist" element={<WishListPage />} />
+
+          <Route path="/about" element={<About />} />
+          <Route path="/notifications" element={<NotificationPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+
           <Route path="/purchased" element={<PurchasedCourses />} />
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/add-course" element={<AddCourse />} />

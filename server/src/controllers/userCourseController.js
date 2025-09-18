@@ -40,34 +40,42 @@ const displayOneCourseToUser = async (req, res)=>{
 const purchaseCourse = async (req, res)=>{
     console.log("Request recieved for purchase specific course to user");
     try {
+        console.log("w1")
         const { id } = req.params;
+        console.log("w2",id);
         if (!id) {
             return res.status(400).json({ success: false, message: "Course ID is required." });
         }
-
+        console.log("w3")
         const course = await CourseModel.findById(id);
         if (!course) {
             return res.status(404).json({ success: false, message: "Course not found." });
         }
 
+        console.log("w4")
         const userId = req.userInfo._id;
         const userPurchaseCollection = await PurchaseModel.findOne({ user: userId });
+        console.log("w5",userPurchaseCollection);
         if (userPurchaseCollection) {
+            console.log("w6")
             if (userPurchaseCollection.courses.includes(id)) {
                 return res.status(400).json({ success: false, message: "Course already purchased." });
             }
+            console.log("w7")
             userPurchaseCollection.courses.push(id);
             await userPurchaseCollection.save();
         } else {
+            console.log("w8")
             const newPurchase = new PurchaseModel({
                 user: userId,
                 courses: [id]
             });
             await newPurchase.save();
         }
-
+        console.log("w9")
         res.status(200).json({ success: true, message: "Course purchased successfully." });
     } catch (error) {
+        
         res.status(500);
         throw new Error("Server error during course purchase.");
     }
@@ -243,7 +251,7 @@ const mergeGuestCart = async (req, res) => {
   }
 };
 
-
+//add or remove from wish lish router
 const addToWishList = async (req, res)=>{
 console.log("Request recieved for add to wishlist.")
     try {
@@ -270,10 +278,59 @@ console.log("Request recieved for add to wishlist.")
         throw new Error("Server error while adding course to your cart");
     }
 }
-
+// show added wish list courses
 const showAllWishListCourse = async (req, res)=>{
-    
+    console.log("Request received for showing all wish list courses.");
+  try {
+    const user = await UserModel.findById(req.userInfo._id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found." });
+    }
+
+    // Fetch courses with limited fields (for cart display)
+    const userCoursesInCart = await CourseModel.find({
+      _id: { $in: user.wishlist },
+    }).select("title price thumbnail category instructor rating lessons");
+
+    res.status(200).json({
+      success: true,
+      courses: userCoursesInCart,
+    });
+  } catch (error) {
+    console.error("Error fetching your wish list courses:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching wish list courses.",
+    });
+  }
 }
+
+const searchForCourse = async (req, res) => {
+  try {
+    const query = req.query.q?.trim();
+    if (!query) {
+      return res.json({ success: true, results: [] });
+    }
+
+    const regex = new RegExp(query, "i"); // case-insensitive
+
+    const courses = await CourseModel.find({
+      $or: [
+        { title: regex },
+        { category: regex },
+        { "instructor.name": regex }
+      ]
+    })
+      .select("title category price thumbnail instructor.name") // only required fields
+      .limit(10); // prevent too many results
+
+    res.json({ success: true, results: courses });
+  } catch (error) {
+    console.error("Error searching courses:", error);
+    res.status(500).json({ success: false, message: "Server error while searching." });
+  }
+};
 
 module.exports={
     displayAllCourseToUser,
@@ -287,5 +344,6 @@ module.exports={
     showAllCartCourseWhenUserNotLogedIn,
     mergeGuestCart,
     addToWishList,
-    showAllWishListCourse
+    showAllWishListCourse,
+    searchForCourse
 }

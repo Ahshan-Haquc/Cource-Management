@@ -18,11 +18,14 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import { useWishList } from "../context/WishListContext";
+import SearchBox from "../components/SearchBox";
 
 
 function Navbar() {
     const { user, setUser } = useAuth();
     const { cart, cartWhenUserNotLogedIn, setCartWhenUserNotLogedIn } = useCart();
+    const { wishList } = useWishList();
     const isAdmin = user?.role === "admin";
     const isUser = user?.role === "user";
 
@@ -36,6 +39,7 @@ function Navbar() {
         if (res.data.success) {
             setUser(null);
             setCartWhenUserNotLogedIn([]);
+            localStorage.removeItem("guestCart");
             window.location.href = "/login";
         } else {
             alert("Logout failed. Please try again.");
@@ -96,20 +100,20 @@ function Navbar() {
                     {/* Icons Section */}
                     <div className="flex items-center space-x-5">
                         {/* Search */}
-                        <Link
-                            to="/search"
-                            className="hover:text-[#76ABAE] transition-transform duration-200 transform hover:scale-110"
-                        >
-                            <Search size={22} />
-                        </Link>
+                        <SearchBox />
 
                         {/* Wishlist */}
                         {isUser && (
                             <Link
                                 to="/wishlist"
-                                className="hover:text-[#76ABAE] transition-transform duration-200 transform hover:scale-110"
+                                className="relative hover:text-[#76ABAE] transition-transform duration-200 transform hover:scale-110"
                             >
                                 <Heart size={22} />
+                                {wishList.length > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-[#76ABAE] text-[#222831] text-xs font-bold px-1.5 py-0.5 rounded-full">
+                                        {wishList.length}
+                                    </span>
+                                )}
                             </Link>
                         )}
 
@@ -146,9 +150,12 @@ function Navbar() {
                         {isUser && (
                             <Link
                                 to="/notifications"
-                                className="hover:text-[#76ABAE] transition-transform duration-200 transform hover:scale-110"
+                                className="relative hover:text-[#76ABAE] transition-transform duration-200 transform hover:scale-110"
                             >
                                 <Bell size={22} />
+                                <span className="absolute -top-2 -right-2 bg-[#76ABAE] text-[#222831] text-xs font-bold px-1.5 py-0.5 rounded-full">
+                                    1
+                                </span>
                             </Link>
                         )}
 

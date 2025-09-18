@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Heart, ShoppingCart, Star, BookOpen, Clock, Users, Award, ChevronDown, CheckCircle } from "lucide-react"; // Added new icons
+import { ShoppingCart, Heart, Star, BookOpen, Clock, Users, Award, ChevronDown, CheckCircle } from "lucide-react"; // Added new icons
 import axios from "axios";
+import { useCart } from "../context/CartContext";
+import { useWishList } from "../context/WishListContext";
 
 function CourseDetails() {
     const { id } = useParams();
@@ -10,6 +12,9 @@ function CourseDetails() {
     const [addedToWishlist, setAddedToWishlist] = useState(false);
     const [purchased, setPurchased] = useState(false);
     const [openFAQIndex, setOpenFAQIndex] = useState(null); // State for FAQ accordion
+
+    const { addToCart } = useCart();
+    const { toggleWishList } = useWishList();
 
     // Uncomment and adapt if you want to fetch real data
     useEffect(() => {
@@ -30,20 +35,7 @@ function CourseDetails() {
         fetchCourse();
     }, [id]);
 
-    const addToWishlist = async () => {
-        try {
-            // await axios.post(
-            //     `http://localhost:5000/api/courses/addToWishlist/${id}`,
-            //     {},
-            //     { withCredentials: true }
-            // );
-            setAddedToWishlist(true);
-            alert("Course added to wishlist!");
-        } catch (err) {
-            console.error(err);
-            alert("Error adding course to wishlist.");
-        }
-    };
+
 
     // Purchase course
     const handlePurchase = async (id) => {
@@ -55,7 +47,7 @@ function CourseDetails() {
 
             if (res.data.success) {
                 setPurchased(true);
-                alert("Course purchased successfully!");
+                alert(res.data.message);
             }
         } catch (error) {
             console.error(error);
@@ -215,22 +207,29 @@ function CourseDetails() {
                         </div>
 
                         {/* Actions */}
+
                         <button
-                            onClick={handlePurchase}
+                            onClick={() => toggleWishList(course._id)}
+                            className={`w-full flex items-center justify-center gap-3 px-6 py-4 border-2 border-[#76ABAE] text-[#76ABAE] font-bold rounded-lg shadow-md hover:bg-[#76ABAE] hover:cursor-pointer hover:text-[#222831] transition-all duration-300 ${addedToWishlist ? "opacity-70 cursor-not-allowed" : ""}`}
+                        >
+                            <Heart size={22} fill={addedToWishlist ? "#76ABAE" : "none"} />
+                            Add to Wishlist
+                        </button>
+                        <button
+                            onClick={() => addToCart(course._id)}
+                            disabled={addedToWishlist}
+                            className={`w-full flex items-center justify-center gap-3 px-6 py-4 border-2 border-[#76ABAE] text-[#76ABAE] font-bold rounded-lg shadow-md hover:bg-[#76ABAE] hover:cursor-pointer hover:text-[#222831] transition-all duration-300 ${addedToWishlist ? "opacity-70 cursor-not-allowed" : ""}`}
+                        >
+                            <ShoppingCart size={22} fill={addedToWishlist ? "#76ABAE" : "none"} />
+                            Add to Cart
+                        </button>
+                        <button
+                            onClick={() => handlePurchase(course._id)}
                             disabled={purchased}
-                            className={`w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#76ABAE] text-[#222831] font-bold rounded-lg shadow-lg hover:bg-[#5e8f91] transition-all duration-300 transform hover:-translate-y-1 ${purchased ? "opacity-70 cursor-not-allowed" : ""}`}
+                            className={`w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#76ABAE] text-[#222831] font-bold rounded-lg shadow-lg hover:bg-[#5e8f91] hover:cursor-pointer transition-all duration-300 transform ${purchased ? "opacity-70 cursor-not-allowed" : ""}`}
                         >
                             <ShoppingCart size={22} />
                             {purchased ? "Course Purchased!" : `Buy Now for $${discountedPrice.toFixed(2)}`}
-                        </button>
-
-                        <button
-                            onClick={addToWishlist}
-                            disabled={addedToWishlist}
-                            className={`w-full flex items-center justify-center gap-3 px-6 py-4 border-2 border-[#76ABAE] text-[#76ABAE] font-bold rounded-lg shadow-md hover:bg-[#76ABAE] hover:text-[#222831] transition-all duration-300 ${addedToWishlist ? "opacity-70 cursor-not-allowed" : ""}`}
-                        >
-                            <Heart size={22} fill={addedToWishlist ? "#76ABAE" : "none"} />
-                            {addedToWishlist ? "Added to Wishlist" : "Add to Wishlist"}
                         </button>
                     </div>
                 </div>

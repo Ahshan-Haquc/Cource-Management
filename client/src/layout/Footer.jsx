@@ -7,12 +7,11 @@ export default function Footer() {
     return (
         <footer className="bg-gradient-to-br from-[#222831] to-[#31363F] text-[#EEEEEE] py-16 px-6">
             <div className="container mx-auto max-w-7xl flex flex-col items-center text-center md:flex-row md:justify-between md:text-left">
-                {/* Brand and Copyright Section */}
                 <div className="mb-8 md:mb-0">
                     <div className="flex gap-3">
                         <Cpu size={32} className="text-[#76ABAE] mr-2" />
                         <Link to="/" className="text-2xl font-extrabold text-[#EEEEEE] hover:text-[#76ABAE] transition-colors duration-200">
-                            ByteAcademi
+                            DevZone Academy
                         </Link>
                     </div>
                     <p className="text-gray-400 text-sm mt-4">
@@ -22,11 +21,12 @@ export default function Footer() {
 
                 {/* Navigation Links */}
                 <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4 mb-8 md:mb-0">
-                    <a href="#" className="font-semibold hover:text-[#76ABAE] transition-colors duration-200">About</a>
-                    <a href="#" className="font-semibold hover:text-[#76ABAE] transition-colors duration-200">Contact</a>
-                    <a href="#" className="font-semibold hover:text-[#76ABAE] transition-colors duration-200">Terms of Service</a>
-                    <a href="#" className="font-semibold hover:text-[#76ABAE] transition-colors duration-200">Privacy Policy</a>
+                    <Link to="/about" className="font-semibold hover:text-[#76ABAE] transition-colors duration-200">About</Link>
+                    <Link to="/contact" className="font-semibold hover:text-[#76ABAE] transition-colors duration-200">Contact</Link>
+                    <Link to="/terms" className="font-semibold hover:text-[#76ABAE] transition-colors duration-200">Terms of Service</Link>
+                    <Link to="/privacy" className="font-semibold hover:text-[#76ABAE] transition-colors duration-200">Privacy Policy</Link>
                 </div>
+
 
                 {/* Social Icons */}
                 <div className="flex justify-center md:justify-start gap-4">
