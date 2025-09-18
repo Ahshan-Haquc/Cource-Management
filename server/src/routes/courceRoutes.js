@@ -8,6 +8,8 @@ const {
     addToCart,
     removeFromCart,
     showAllCartCourse,
+    showAllCartCourseWhenUserNotLogedIn,
+    mergeGuestCart,
     addToWishList,
     showAllWishListCourse
 } = require('../controllers/userCourseController')
@@ -26,6 +28,8 @@ courseRouter.delete('/deleteUserPurchasedCourse/:courseId', authenticateUserAcce
 courseRouter.get('/addToCart/:courseId',authenticateUserAccess, addToCart)
 courseRouter.get('/removeFromCart/:courseId',authenticateUserAccess, removeFromCart)
 courseRouter.get('/cart',authenticateUserAccess, showAllCartCourse)
+courseRouter.post('/cart/guest', showAllCartCourseWhenUserNotLogedIn) // this route is for guest user means user not loged in
+courseRouter.post('/cart/merge',authenticateUserAccess, mergeGuestCart) 
 
 courseRouter.get('/addToWishList/:courseId',authenticateUserAccess, addToWishList); // if course is exist in users wishlist then by the same router course will remove means toggle
 courseRouter.get('/showAllWishListCourse',authenticateUserAccess, showAllWishListCourse)

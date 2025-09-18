@@ -1,5 +1,5 @@
 // src/pages/LandingPage.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import HeroSection from '../sections/home/HeroSection'
 import SearchBarCategories from '../sections/home/SearchBarCategories'
 import FeaturedCourses from '../sections/home/FeaturedCourses'
@@ -9,9 +9,14 @@ import HowItWorks from '../sections/home/HowItWorks'
 import InstructorSection from '../sections/home/InstructorSection'
 import CTASection from '../sections/home/CTASection'
 import Courses from './Courses'
+import { useCart } from "../context/CartContext";
 
 
 export default function LandingPage() {
+    const { fetchCart } = useCart();
+    useEffect(() => {
+        fetchCart();
+    }, [])
     return (
         <>
             {/* 1. Hero */}

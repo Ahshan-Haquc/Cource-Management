@@ -2,15 +2,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Trash2, Heart, ShoppingBag, ArrowRight, Star } from "lucide-react";
+import { Trash2, Heart, ShoppingBag, ArrowRight, Star, Flag } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { FaHeart } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 
 function CartPage() {
     const { user } = useAuth();
-    const [loading, setLoading] = useState(true);
-    const { cart, setCart, handleRemoveFromCart } = useCart();
+    const [loading, setLoading] = useState(false);
+    const { cart, setCart, handleRemoveFromCart, cartWhenUserNotLogedIn, fetchCartWhenUserNotLogedIn } = useCart();
+    const [finalCart, setFinalCart] = useState([]); // to handle both logged in and guest user cart
+
+    useEffect(() => {
+        if (user) {
+            setFinalCart(cart);
+        } else {
+            setFinalCart(cartWhenUserNotLogedIn);
+        }
+    }, [user, cart, cartWhenUserNotLogedIn]);
 
     const fetchCart = async () => {
         try {
@@ -24,8 +33,10 @@ function CartPage() {
             setLoading(false);
         }
     };
+
     useEffect(() => {
-        fetchCart();
+        user && fetchCart();
+        !user && fetchCartWhenUserNotLogedIn();
     }, []);
 
 
@@ -47,7 +58,7 @@ function CartPage() {
     }
 
     const calculateSubtotal = () =>
-        cart.reduce((acc, c) => acc + c.price, 0);
+        finalCart.reduce((acc, c) => acc + c.price, 0);
 
     const discount = 0; // can add coupon logic later
     const total = calculateSubtotal() - discount;
@@ -63,8 +74,9 @@ function CartPage() {
                 <div className="grid lg:grid-cols-3 gap-10">
 
                     {/* Cart Items */}
+
                     <div className="lg:col-span-2 space-y-6">
-                        {cart.length === 0 ? (
+                        {finalCart.length === 0 ? (
                             <div className="bg-[#31363F] p-8 rounded-2xl text-center shadow-lg border border-[#31363F]">
                                 <ShoppingBag size={64} className="mx-auto text-gray-400 mb-4" />
                                 <h2 className="text-2xl font-bold text-gray-300">Your cart is empty.</h2>
@@ -74,7 +86,7 @@ function CartPage() {
                                 </Link>
                             </div>
                         ) : (
-                            cart.map((course) => (
+                            finalCart.map((course) => (
                                 <div
                                     key={course._id}
                                     className="relative flex flex-col sm:flex-row bg-[#31363F] rounded-2xl shadow-lg border border-[#31363F] hover:border-[#76ABAE] transition-all duration-300 overflow-hidden"
@@ -143,7 +155,7 @@ function CartPage() {
                     </div>
 
                     {/* Cart Summary */}
-                    {cart.length > 0 && (
+                    {finalCart.length > 0 && (
                         <div className="lg:col-span-1 sticky top-8 h-fit bg-[#31363F] p-8 rounded-2xl shadow-lg border-2 border-[#31363F] hover:border-[#76ABAE] transition-all duration-300">
                             <h3 className="text-2xl font-bold mb-6">Order Summary</h3>
 
