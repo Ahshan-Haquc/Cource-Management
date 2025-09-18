@@ -1,7 +1,7 @@
 // src/pages/CartPage.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Trash2, Heart, ShoppingBag, ArrowRight, Star, Flag } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { FaHeart } from "react-icons/fa";
@@ -12,6 +12,7 @@ function CartPage() {
     const [loading, setLoading] = useState(false);
     const { cart, setCart, handleRemoveFromCart, cartWhenUserNotLogedIn, fetchCartWhenUserNotLogedIn } = useCart();
     const [finalCart, setFinalCart] = useState([]); // to handle both logged in and guest user cart
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (user) {
@@ -36,7 +37,10 @@ function CartPage() {
 
     useEffect(() => {
         user && fetchCart();
-        !user && fetchCartWhenUserNotLogedIn();
+        if (!user) {
+            alert("Please login to see and merge you carts");
+            navigate('/login');
+        }
     }, []);
 
 
@@ -132,7 +136,10 @@ function CartPage() {
                                         </div>
 
                                         <div className="flex justify-between items-center mt-4">
-                                            <span className="text-2xl font-bold text-[#EEEEEE]">${course.price.toFixed(2)}</span>
+                                            <span className="text-2xl font-bold text-[#EEEEEE]">
+                                                ${course.price ? course.price.toFixed(2) : "0.00"}
+                                            </span>
+
                                             <div className="flex gap-3">
                                                 <button className="flex items-center gap-1 text-[#76ABAE] hover:text-white transition-colors" onClick={() => handleAddAndRemoveFromWishList(course._id)} title={user && user?.wishlist?.includes(course._id) ? "Remove from Wish-list" : "Add to Wish-list"}>
                                                     {user && user?.wishlist?.includes(course._id) ? (
