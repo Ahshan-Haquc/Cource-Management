@@ -20,20 +20,15 @@ import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 
 
-function Navbar({ user, theme, toggleTheme, cartCount = 2 }) {
-    const { setUser } = useAuth();
-    const { cart } = useCart();
+function Navbar() {
+    const { user, setUser } = useAuth();
+    const { cart, cartWhenUserNotLogedIn } = useCart();
     const isAdmin = user?.role === "admin";
     const isUser = user?.role === "user";
 
-    const ThemeIcon = theme === "light" ? Sun : Moon;
+    // const ThemeIcon = theme === "light" ? Sun : Moon;
 
     const [isProfileIconVisible, setIsProfileIconVisible] = useState(false);
-
-    // useEffect(() => {
-    //     console.log("navBar is running")
-    //     fetchCart()
-    // })
 
     const logout = async () => {
         localStorage.removeItem("token");
@@ -131,6 +126,20 @@ function Navbar({ user, theme, toggleTheme, cartCount = 2 }) {
                                 )}
                             </Link>
                         )}
+                        {/* Guest Cart */}
+                        {!isUser && (
+                            <Link
+                                to="/cart"
+                                className="relative hover:text-[#76ABAE] transition-transform duration-200 transform hover:scale-110"
+                            >
+                                <ShoppingCart size={22} />
+                                {cartWhenUserNotLogedIn.length > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-[#76ABAE] text-[#222831] text-xs font-bold px-1.5 py-0.5 rounded-full">
+                                        {cartWhenUserNotLogedIn.length}
+                                    </span>
+                                )}
+                            </Link>
+                        )}
 
                         {/* Notifications */}
                         {isUser && (
@@ -143,13 +152,13 @@ function Navbar({ user, theme, toggleTheme, cartCount = 2 }) {
                         )}
 
                         {/* Theme Toggle */}
-                        <button
+                        {/* <button
                             onClick={toggleTheme}
                             className="hover:text-[#76ABAE] transition-transform duration-200 transform hover:scale-110 focus:outline-none"
                             aria-label="Toggle theme"
                         >
                             <ThemeIcon size={22} />
-                        </button>
+                        </button> */}
                     </div>
 
 

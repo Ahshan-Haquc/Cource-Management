@@ -4,7 +4,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { User, CheckCircle, XCircle, TabletSmartphone } from "lucide-react";
-import { useCart } from "../context/CartContext";
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -14,7 +13,6 @@ function Login() {
     const { setUser } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState("");
-    const { fetchCart } = useCart();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,7 +36,6 @@ function Login() {
                 if (res.data.user.role === "admin") {
                     navigate("/admin");
                 } else {
-                    fetchCart();
                     navigate("/");
                 }
             }

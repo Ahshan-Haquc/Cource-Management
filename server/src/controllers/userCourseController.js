@@ -195,6 +195,55 @@ const showAllCartCourse = async (req, res) => {
   }
 };
 
+const showAllCartCourseWhenUserNotLogedIn = async (req, res) => {
+    console.log("Request received for showing all cart courses for guest user.");
+    try {
+        const { courseIds } = req.body;
+
+        if (!courseIds || !Array.isArray(courseIds) || courseIds.length === 0) {
+            return res.status(400).json({ success: false, message: "Course IDs are required." });
+        }
+
+        // Fetch courses based on the provided IDs
+        const guestCartCourses = await CourseModel.find({ _id: { $in: courseIds } })
+            .select("title price thumbnail category instructor rating lessons");
+
+        res.status(200).json({
+            success: true,
+            courses: guestCartCourses,
+        });
+    } catch (error) {
+        console.error("Error fetching guest cart courses:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error while fetching guest cart courses.",
+        });
+    }
+};
+
+const mergeGuestCart = async (req, res) => {
+  try {
+    const { courseIds } = req.body;
+    const user = await UserModel.findById(req.userInfo._id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Avoid duplicates
+    const newCart = [...new Set([...user.cart, ...courseIds])];
+    user.cart = newCart;
+
+    await user.save();
+
+    res.status(200).json({ success: true, message: "Guest cart merged successfully." });
+  } catch (error) {
+    console.error("Error merging guest cart:", error);
+    res.status(500).json({ success: false, message: "Error merging guest cart." });
+  }
+};
+
+
 const addToWishList = async (req, res)=>{
 console.log("Request recieved for add to wishlist.")
     try {
@@ -235,6 +284,8 @@ module.exports={
     addToCart,
     removeFromCart,
     showAllCartCourse,
+    showAllCartCourseWhenUserNotLogedIn,
+    mergeGuestCart,
     addToWishList,
     showAllWishListCourse
 }
