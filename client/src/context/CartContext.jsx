@@ -9,7 +9,7 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [cartWhenUserNotLogedIn, setCartWhenUserNotLogedIn] = useState([]);
 
-    // 🔥 Fetch logged-in cart from DB
+    // Fetch logged-in cart from DB
     const fetchCart = async () => {
         try {
             const res = await axios.get("http://localhost:5000/api/courses/cart", { withCredentials: true });
@@ -19,7 +19,7 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    // 🔥 Fetch guest cart from local state
+    // Fetch guest cart from local state
     const fetchCartWhenUserNotLogedIn = async () => {
         try {
             const courseIds = cartWhenUserNotLogedIn.map((item) => item._id);
@@ -76,6 +76,7 @@ export const CartProvider = ({ children }) => {
                 );
                 if (res.data.success) {
                     fetchCart();
+                    alert("Course added in your cart.");
                 } else {
                     alert(res.data.message);
                 }
@@ -89,6 +90,7 @@ export const CartProvider = ({ children }) => {
             }
             setCartWhenUserNotLogedIn((prev) => [...prev, { _id: courseId }]);
             fetchCartWhenUserNotLogedIn(); // immediately update cart preview
+            alert("Course added in your cart.");
         }
     };
 
