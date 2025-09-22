@@ -15,7 +15,7 @@ app.set("trust proxy", 1);
 app.use(cors({
   origin: [
     "http://localhost:5173", 
-    "https://1-minute-quiz.vercel.app" // deployed frontend
+    "https://dev-zone-academy.vercel.app" // deployed frontend
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
