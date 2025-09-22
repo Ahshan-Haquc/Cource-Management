@@ -26,7 +26,7 @@ function AddCourse() {
         setError("");
         try {
             const res = await axios.post(
-                "http://localhost:5000/api/admin/courses/addNewCourse",
+                "https://cource-management-backend.vercel.app/api/admin/courses/addNewCourse",
                 formData,
                 { withCredentials: true }
             );

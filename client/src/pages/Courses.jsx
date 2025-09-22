@@ -21,7 +21,7 @@ function Home() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const res = await axios.get("http://localhost:5000/api/courses/displayAllCourseToUser", {
+                const res = await axios.get("https://cource-management-backend.vercel.app/api/courses/displayAllCourseToUser", {
                     withCredentials: true,
                 });
                 if (res.data.success) {

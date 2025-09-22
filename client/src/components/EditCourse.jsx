@@ -20,7 +20,7 @@ function EditCourse() {
         const fetchCourse = async () => {
             try {
                 const res = await axios.get(
-                    `http://localhost:5000/api/admin/courses/${id}`,
+                    `https://cource-management-backend.vercel.app/api/admin/courses/${id}`,
                     { withCredentials: true }
                 );
                 if (res.data.success) {
@@ -56,7 +56,7 @@ function EditCourse() {
         setError("");
         try {
             const res = await axios.patch(
-                `http://localhost:5000/api/admin/courses/editCourseInfo/${id}`,
+                `https://cource-management-backend.vercel.app/api/admin/courses/editCourseInfo/${id}`,
                 formData,
                 { withCredentials: true }
             );

@@ -35,7 +35,7 @@ function Navbar() {
 
     const logout = async () => {
         localStorage.removeItem("token");
-        const res = await axios.get("http://localhost:5000/api/auth/logout", { withCredentials: true });
+        const res = await axios.get("https://cource-management-backend.vercel.app/logout", { withCredentials: true });
         if (res.data.success) {
             setUser(null);
             setCartWhenUserNotLogedIn([]);

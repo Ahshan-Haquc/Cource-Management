@@ -11,7 +11,7 @@ function AdminHome() {
     const fetchCourses = async () => {
         try {
             const res = await axios.get(
-                "http://localhost:5000/api/admin/courses/displayAllCourseToAdmin",
+                "https://cource-management-backend.vercel.app/api/admin/courses/displayAllCourseToAdmin",
                 { withCredentials: true }
             );
             if (res.data.success) {
@@ -31,7 +31,7 @@ function AdminHome() {
         if (!window.confirm("Are you sure you want to delete this course?")) return;
         try {
             const res = await axios.delete(
-                `http://localhost:5000/api/admin/courses/deleteCourse/${id}`,
+                `https://cource-management-backend.vercel.app/api/admin/courses/deleteCourse/${id}`,
                 { withCredentials: true }
             );
             if (res.data.success) {
