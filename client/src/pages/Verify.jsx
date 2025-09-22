@@ -10,7 +10,7 @@ function Verify() {
     useEffect(() => {
         const verifyEmail = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/auth/verify/${token}`);
+                const res = await axios.get(`https://cource-management-backend.vercel.app/api/auth/verify/${token}`);
                 setMessage(res.data);
             } catch (err) {
                 setMessage("Verification failed or link expired.");

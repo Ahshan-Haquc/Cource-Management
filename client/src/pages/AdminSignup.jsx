@@ -23,7 +23,7 @@ function Signup() {
 
         try {
             const res = await axios.post(
-                "http://localhost:5000/api/auth/adminRegister",
+                "https://cource-management-backend.vercel.app/api/auth/adminRegister",
                 formData,
                 { withCredentials: true }
             );

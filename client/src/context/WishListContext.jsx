@@ -13,7 +13,7 @@ export const WishListProvider = ({ children }) => {
     const fetchWishList = async () => {
         if (!user) return;
         try {
-            const res = await axios.get("http://localhost:5000/api/courses/showAllWishListCourse", {
+            const res = await axios.get("https://cource-management-backend.vercel.app/api/courses/showAllWishListCourse", {
                 withCredentials: true,
             });
             if (res.data.success) setWishList(res.data.courses);
@@ -30,7 +30,7 @@ export const WishListProvider = ({ children }) => {
         }
         try {
             const res = await axios.get(
-                `http://localhost:5000/api/courses/addToWishList/${courseId}`,
+                `https://cource-management-backend.vercel.app/api/courses/addToWishList/${courseId}`,
                 { withCredentials: true }
             );
             alert(res.data.message);

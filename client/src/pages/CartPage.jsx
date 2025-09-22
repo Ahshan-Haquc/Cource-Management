@@ -20,7 +20,7 @@ function CartPage() {
 
     const fetchCart = async () => {
         try {
-            const { data } = await axios.get("http://localhost:5000/api/courses/cart", { withCredentials: true });
+            const { data } = await axios.get("https://cource-management-backend.vercel.app/api/courses/cart", { withCredentials: true });
             if (data.success) {
                 setCart(data.courses);
             }
@@ -46,7 +46,7 @@ function CartPage() {
     const handleAddAndRemoveFromWishList = async (id) => {
         try {
             const res = await axios.get(
-                `http://localhost:5000/api/courses/addToWishList/${id}`,
+                `https://cource-management-backend.vercel.app/api/courses/addToWishList/${id}`,
                 { withCredentials: true }
             );
 

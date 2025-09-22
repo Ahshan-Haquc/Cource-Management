@@ -22,7 +22,7 @@ function CourseDetails() {
             setLoading(true);
             try {
                 const res = await axios.get(
-                    `http://localhost:5000/api/courses/displayOneCourseToUser/${id}`,
+                    `https://cource-management-backend.vercel.app/api/courses/displayOneCourseToUser/${id}`,
                     { withCredentials: true }
                 );
                 setCourse(res.data.courses[0]);
@@ -41,7 +41,7 @@ function CourseDetails() {
     const handlePurchase = async (id) => {
         try {
             const res = await axios.get(
-                `http://localhost:5000/api/courses/purchaseCourse/${id}`,
+                `https://cource-management-backend.vercel.app/api/courses/purchaseCourse/${id}`,
                 { withCredentials: true }
             );
 

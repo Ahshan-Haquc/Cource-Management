@@ -25,7 +25,7 @@ function SearchBarCategories() {
 
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:5000/api/courses/search?q=${q}`);
+            const res = await axios.get(`https://cource-management-backend.vercel.app/api/courses/search?q=${q}`);
             setResults(res.data.results || []);
         } catch (err) {
             console.error("Search error:", err);

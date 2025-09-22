@@ -133,7 +133,7 @@ export default function AddCourse() {
         try {
             setSubmitting(true);
             const res = await axios.post(
-                "http://localhost:5000/api/admin/courses/addNewCourse",
+                "https://cource-management-backend.vercel.app/api/admin/courses/addNewCourse",
                 payload,
                 { withCredentials: true } // send cookies
             );

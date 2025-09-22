@@ -11,7 +11,7 @@ function ForgotPassword() {
         e.preventDefault();
         setMessage(""); // Clear previous messages
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/forgot-password", { email });
+            const res = await axios.post("https://cource-management-backend.vercel.app/api/auth/forgot-password", { email });
             setMessage(res.data.message);
             setIsSuccess(true);
         } catch (err) {

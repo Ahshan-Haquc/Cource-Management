@@ -27,7 +27,7 @@ export const CartProvider = ({ children }) => {
     const fetchCart = async () => {
         try {
             console.log("calling")
-            const res = await axios.get("http://localhost:5000/api/courses/cart", { withCredentials: true });
+            const res = await axios.get("https://cource-management-backend.vercel.app/api/courses/cart", { withCredentials: true });
             if (res.data.success) setCart(res.data.courses);
         } catch (err) {
             console.error("Error fetching cart:", err);
@@ -40,7 +40,7 @@ export const CartProvider = ({ children }) => {
             const courseIds = cartWhenUserNotLogedIn.map((item) => item._id);
             if (courseIds.length === 0) return;
 
-            const res = await axios.post("http://localhost:5000/api/courses/cart/guest", { courseIds });
+            const res = await axios.post("https://cource-management-backend.vercel.app/api/courses/cart/guest", { courseIds });
             if (res.data.success) {
                 setCart(res.data.courses); // reuse the same `cart` for UI
 
@@ -58,7 +58,7 @@ export const CartProvider = ({ children }) => {
             const courseIds = cartWhenUserNotLogedIn.map((item) => item._id);
 
             const res = await axios.post(
-                "http://localhost:5000/api/courses/cart/merge",
+                "https://cource-management-backend.vercel.app/api/courses/cart/merge",
                 { courseIds },
                 { withCredentials: true }
             );
@@ -96,7 +96,7 @@ export const CartProvider = ({ children }) => {
         if (user) {
             try {
                 const res = await axios.get(
-                    `http://localhost:5000/api/courses/addToCart/${courseId}`,
+                    `https://cource-management-backend.vercel.app/api/courses/addToCart/${courseId}`,
                     { withCredentials: true }
                 );
                 if (res.data.success) {
@@ -124,7 +124,7 @@ export const CartProvider = ({ children }) => {
         if (user) {
             try {
                 const res = await axios.get(
-                    `http://localhost:5000/api/courses/removeFromCart/${courseId}`,
+                    `https://cource-management-backend.vercel.app/api/courses/removeFromCart/${courseId}`,
                     { withCredentials: true }
                 );
                 if (res.data.success) {

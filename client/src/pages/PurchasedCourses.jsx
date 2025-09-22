@@ -12,7 +12,7 @@ function PurchasedCourses() {
             try {
                 setLoading(true);
                 const res = await axios.get(
-                    "http://localhost:5000/api/courses/seeUserPurchasedCourses",
+                    "https://cource-management-backend.vercel.app/api/courses/seeUserPurchasedCourses",
                     { withCredentials: true }
                 );
                 if (res.data.success) {

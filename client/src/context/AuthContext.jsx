@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/auth/me", { withCredentials: true })
+        axios.get("https://cource-management-backend.vercel.app/api/auth/me", { withCredentials: true })
             .then(res => setUser(res.data.user))
             .catch(() => setUser(null));
     }, []);
