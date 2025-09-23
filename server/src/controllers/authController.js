@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendEmail');
 const sendEmailPassRecovery = require('../utils/sendEmailPassRecovery');
 
-// ================== USER REGISTER ====================
+
 const userRegister = async (req, res) => {
   console.log("Request recieved for signup.");
   try {
@@ -44,7 +44,7 @@ const userRegister = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    const verifyUrl = `${process.env.SERVER_URL}/api/auth/verify/${verifyToken}`;
+    const verifyUrl = `https://cource-management-backend.vercel.app/api/auth/verify/${verifyToken}`;
 
     // Send email
     await sendEmail(
@@ -62,7 +62,6 @@ const userRegister = async (req, res) => {
   }
 };
 
-// ================== VERIFY EMAIL ==================
 const verifyEmail = async (req, res) => {
   try {
     const { token } = req.params;
@@ -74,13 +73,12 @@ const verifyEmail = async (req, res) => {
     user.isVerified = true;
     await user.save();
 
-    res.send("✅ Email verified successfully! Now you can login.");
+    res.send("Email verified successfully! Now you can login.");
   } catch (err) {
-    res.status(400).send("❌ Invalid or expired token");
+    res.status(400).send("Invalid or expired token");
   }
 };
 
-// ================== ADMIN REGISTER ==================
 const adminRegister = async (req, res) => {
   try {
     const { email } = req.body;
@@ -109,7 +107,6 @@ const adminRegister = async (req, res) => {
   }
 };
 
-// ================== USER LOGIN ==================
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -153,7 +150,6 @@ const userLogin = async (req, res) => {
   }
 };
 
-// ================== LOGOUT ==================
 const userLogout = async (req, res) => {
   try {
     const user = await UserModel.findOne({ _id: req.userInfo._id });
@@ -175,7 +171,6 @@ const userLogout = async (req, res) => {
   }
 };
 
-// ================== GET USER ==================
 const getUser = (req, res) => {
   try {
     res.status(200).json({
@@ -205,7 +200,7 @@ const forgotPassword = async (req, res) => {
     );
 
     // send reset link
-    const resetURL = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetURL = `https://dev-zone-academy.vercel.app/reset-password/${resetToken}`;
     const message = `
       <h1>Password Reset Request</h1>
       <p>Click the link below to reset your password (valid for 15 minutes):</p>
