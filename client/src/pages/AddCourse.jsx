@@ -3,15 +3,6 @@ import axios from "axios";
 import { Plus, Trash2, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-/**
- * Admin Add Course Form
- * - Supports dynamic arrays for lessons, objectives, prerequisites, faqs
- * - Submits JSON body to backend
- * - Uses withCredentials: true so cookie-based auth works
- *
- * Backend route used: POST /api/admin/courses/addNewCourse
- * (Adjust URL if your backend expects a different route)
- */
 
 export default function AddCourse() {
     const navigate = useNavigate();
